@@ -1,5 +1,4 @@
 attrs==19.3.0
-braincomputer==0.1.0
 Click==7.0
 coverage==4.5.4
 Django==2.2.7
