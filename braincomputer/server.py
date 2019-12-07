@@ -5,13 +5,6 @@ from datetime import datetime
 from .utils import Listener
 from .utils import Connection
 
-##### NOTES #####
-# server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) to avoid annoying "port is already in use" errors.
-# socket.recv() doesn't guarantee all the data will be received. so my_recvall loops until all data passed
-# struct.unpack(buffer) Unpack from the buffer (presumably packed by pack(format, ...)) according to the complied format
-# Handler class - gets a connection as a new thread, and 'start' invokes run
-# path.mkdir(exists_ok=True, parents=True) - Create a new directory at this given path, If parents is true, any missing parents of this path are created as needed, If exist_ok is true, FileExistsError exceptions will be ignored
-################
 
 def run_server(address, data):
     print("in runserver")
@@ -24,7 +17,9 @@ def run_server(address, data):
             handler = Handler(connection, data)
             handler.start()
 
+
 lock = threading.Lock()
+
 
 class Handler(threading.Thread):
 
@@ -37,9 +32,11 @@ class Handler(threading.Thread):
         struct_obj = struct.Struct('LLI')
         message_protocol = self.connection.receive(struct_obj.size)
         user_id, timestamp, thought_size = struct_obj.unpack(message_protocol)
-        thought_data = self.connection.receive(thought_size).decode(encoding='utf-8')
+        thought_data = self.connection.receive(thought_size)\
+            .decode(encoding='utf-8')
         directory_path = self.data_root / str(user_id)
-        file_name = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d_%H-%M-%S.txt')
+        file_name = datetime.fromtimestamp(timestamp)\
+            .strftime('%Y-%m-%d_%H-%M-%S.txt')
         file_path = directory_path / file_name
         lock.acquire()
         try:
@@ -57,7 +54,3 @@ class Handler(threading.Thread):
 if __name__ == '__main__':
     import sys
     sys.exit()
-
-
-
-
