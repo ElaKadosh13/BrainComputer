@@ -1,5 +1,5 @@
 # BrainComputer
-
+[![Build Status](https://travis-ci.org/ElaKadosh13/BrainComputer.svg?branch=master)](https://travis-ci.org/ElaKadosh13/BrainComputer)
 
 An example package. See [full documentation](https://advanced-system-design-foobar.readthedocs.io/en/latest/).
 
