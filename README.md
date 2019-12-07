@@ -40,8 +40,6 @@ The `braincomputer` packages provides the following classes:
 
 - `web`
 
-...........
-
 
 The `braincomputer` package also provides a command-line interface:
 
