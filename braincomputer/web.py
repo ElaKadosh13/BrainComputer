@@ -40,25 +40,21 @@ _THOUGHT_LINE_HTML = '''
 
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
-app = Flask(__name__)
+website = Flask(__name__)
 
 def webserver_routers(directory_path):
-    @app.route('/')
+    @website.route('/')
     def index():
-        if directory_path == "":
-            return 404, ''
         users_lines_html = []
         for user in directory_path.iterdir():
             id = user.name
             users_lines_html.append(_USER_LINE_HTML.format(user_id=id))  # add all the sub htmls - users htmls
         users_list = '\n'.join(users_lines_html)
         index_html_page = _INDEX_HTML.format(users=users_list)  # create the index html
-        return 200, index_html_page
+        return index_html_page
 
-    @app.route('/users/<int:user_id>')
+    @website.route('/users/<user_id>')
     def user(user_id):
-        if directory_path == "":
-            return 404, ''
         current_user_directory_path = directory_path / user_id
         thoughts_lines_html = []
         for thought in current_user_directory_path.iterdir():
@@ -67,19 +63,19 @@ def webserver_routers(directory_path):
             thoughts_lines_html.append(_THOUGHT_LINE_HTML.format(timestamp=thought_timestamp, thought=thought_content))
         thought_list = '\n'.join(thoughts_lines_html)
         users_html_page = _USERS_HTML.format(user_id=user_id, thoughts=thought_list)
-        return 200, users_html_page
+        return users_html_page
 
 def run_webserver(address, data_dir):
     global directory_path
     directory_path = pathlib.Path(data_dir)
     webserver_routers(directory_path)
-    app.run(address[0], address[1])
+    website.run(address[0], address[1])
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 3:
-        print(f'USAGE: {sys.argv[0]} <address> <data_dir>')
-        sys.exit()
+       print(f'USAGE: {sys.argv[0]} <address> <data_dir>')
+       sys.exit()
     try:
         address_array = sys.argv[1].split(':')
         address = (address_array[0], int(address_array[1]))

@@ -37,8 +37,6 @@ The `braincomputer` packages provides the following classes:
 
 - `server`
 
-- `website`
-
 - `web`
 
 ...........
