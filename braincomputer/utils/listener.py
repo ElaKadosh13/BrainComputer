@@ -12,7 +12,10 @@ class Listener:
         self.socket = socket.socket()
 
     def __repr__(self):
-        return f'Listener(port={self.port!r}, host={self.host!r}, backlog={self.backlog!r}, reuseaddr={self.reuseaddr!r})'
+        return f'Listener(port={self.port!r}, ' \
+               f'host={self.host!r}, ' \
+               f'backlog={self.backlog!r}, ' \
+               f'reuseaddr={self.reuseaddr!r})'
 
     def __enter__(self):
         if self.reuseaddr:
