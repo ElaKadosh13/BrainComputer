@@ -72,5 +72,5 @@ subcommands:
 
 ```sh
 $ python -m braincomputer run-server "127.0.0.1:5000" "tmp/data"
-
+$ python -m braincomputer run-webserver "127.0.0.1:5000" "tmp/data"
 $ python -m braincomputer upload-thought "127.0.0.1:5000" 1 "my thought"
