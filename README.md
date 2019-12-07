@@ -48,7 +48,18 @@ The `braincomputer` package also provides a command-line interface:
 
 ```sh
 $ python -m braincomputer
-braincomputer, version 0.1.0
+Usage: braincomputer [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version        Show the version and exit.
+  -q, --quiet
+  -t, --traceback
+  --help           Show this message and exit.
+
+Commands:
+  run-server      run server forever
+  upload-thought  upload client thought
+  run-webserver   run webserver forever
 ```
 
 All commands accept the `-q` or `--quiet` flag to suppress output, and the `-t`

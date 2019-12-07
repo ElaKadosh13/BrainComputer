@@ -24,8 +24,9 @@ def run_server(address, data):
             handler = Handler(connection, data)
             handler.start()
 
+lock = threading.Lock()
+
 class Handler(threading.Thread):
-    lock = threading.Lock()
 
     def __init__(self, connection: Connection, data_dir):
         super().__init__()
@@ -40,7 +41,7 @@ class Handler(threading.Thread):
         directory_path = self.data_root / str(user_id)
         file_name = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d_%H-%M-%S.txt')
         file_path = directory_path / file_name
-        self.lock.acquire()
+        lock.acquire()
         try:
             directory_path.mkdir(parents=True, exist_ok=True)
             if file_path.exists():
@@ -50,7 +51,7 @@ class Handler(threading.Thread):
                 with file_path.open('w') as f:
                     f.write(f'{thought_data}')
         finally:
-            self.lock.release()
+            lock.release()
 
 
 if __name__ == '__main__':
