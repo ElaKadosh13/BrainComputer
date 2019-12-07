@@ -60,6 +60,6 @@ The CLI provides the `braincomputer` command, with the `run_server`, `upload_tho
 subcommands:
 
 ```sh
-$ python -m braincomputer run_server address="127.0.0.1:5000" data=data/
+$ python -m braincomputer run-server "127.0.0.1:5000" "tmp/data"
 
-$ python -m braincomputer upload_thought address="127.0.0.1:5000" user=1 thought="my thought"
+$ python -m braincomputer upload-thought "127.0.0.1:5000" 1 "my thought"
