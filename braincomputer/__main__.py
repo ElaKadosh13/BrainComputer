@@ -4,7 +4,8 @@ import traceback
 
 import click
 import braincomputer
-from braincomputer import upload_thought, run_server, run_webserver
+from braincomputer import upload_snapshots, run_server, run_webserver
+from braincomputer.utils.reader import start_reader
 
 
 class Log:
@@ -33,12 +34,11 @@ def main(quiet=False, traceback=False):
     log.traceback = traceback
 
 
-@main.command("upload-thought", short_help="upload client thought")
+@main.command("upload-snapshots", short_help="upload client thought")
 @click.argument("address", type=str)
-@click.argument("user_id", type=int)
-@click.argument("thought", type=str)
-def run_c(address, user_id, thought):
-    log(upload_thought(address, user_id, thought))
+@click.argument("path", type=str)
+def run_c(address, path):
+    log(upload_snapshots(address, path))
 
 
 @main.command("run-server", short_help="run server forever")
@@ -53,6 +53,12 @@ def run_s(address, data_dir):
 @click.argument("data_dir", type=str)
 def run_ws(address, data_dir):
     log(run_webserver(address, data_dir))
+
+
+@main.command("start-reader", short_help="read snapshots")
+@click.argument("path", type=str)
+def run_reader(path):
+    log(start_reader(path))
 
 
 if __name__ == '__main__':

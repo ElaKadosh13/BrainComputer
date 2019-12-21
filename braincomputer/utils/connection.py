@@ -1,4 +1,5 @@
 import socket
+import struct
 
 
 class Connection:
@@ -41,3 +42,12 @@ class Connection:
         sock = socket.socket()
         sock.connect((host, port))
         return Connection(sock)
+
+    def send_message(self, message):
+        message_data = b''.join([struct.pack('I', len(message)), message])
+        self.send(message_data)
+
+    def receive_message(self):
+        message_len, = struct.unpack('I', self.receive(4))
+        message = self.receive(message_len)
+        return message
