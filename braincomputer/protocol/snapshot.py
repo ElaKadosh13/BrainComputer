@@ -32,15 +32,15 @@ class Snapshot:
         if "feelings" in config_fields:
             serialized_snapshot.append(struct.pack('ffff', *self.user_feelings))
         else:
-             serialized_snapshot.append(struct.pack('ffff', *(0, 0, 0, 0)))
-        # if "color_image" in config_fields:
-        #     serialized_snapshot.append(self.color_image.serialize())
-        # else:
-        #     serialized_snapshot.append(ColorImage(0,0,None).serialize())
+            serialized_snapshot.append(struct.pack('ffff', *(0, 0, 0, 0)))
+        if "color_image" in config_fields:
+            serialized_snapshot.append(self.color_image.serialize())
+        else:
+            serialized_snapshot.append(ColorImage(0, 0, None).serialize())
         # if "depth_image" in config_fields:
         #     serialized_snapshot.append(self.depth_image.serialize())
         # else:
-        #     serialized_snapshot.append(DepthImage(0,0,None).serialize())
+        #     serialized_snapshot.append(DepthImage(0, 0, None).serialize())
         return b''.join(serialized_snapshot)
 
     @classmethod
@@ -50,6 +50,6 @@ class Snapshot:
         translation = struct.unpack('ddd', stream_data.read(24))
         rotation = struct.unpack('dddd', stream_data.read(32))
         user_feelings = struct.unpack('ffff', stream_data.read(16))
-        color_image = None # ColorImage.deserialize(stream_data)
-        depth_image = None # DepthImage.deserialize(stream_data)
+        color_image = ColorImage.deserialize(stream_data)
+        depth_image = None #DepthImage.deserialize(stream_data)
         return Snapshot(timestamp, translation, rotation, color_image, depth_image, user_feelings)

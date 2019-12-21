@@ -5,7 +5,6 @@ from datetime import datetime
 from braincomputer.parsers import Parsers
 from braincomputer.protocol import Hello, Config, Snapshot
 from .utils import Listener
-from .utils import Connection
 
 
 def run_server(address, data):
@@ -21,11 +20,15 @@ def run_server(address, data):
 class Context:
     def __init__(self, data_dir):
         self.data_dir = data_dir
+        Handler.lock.acquire()
+        try:
+            self.data_dir.mkdir(parents=True, exist_ok=True)
+        finally:
+            Handler.lock.release()
 
     def save(self, parser_name, data):
         Handler.lock.acquire()
         try:
-            self.data_dir.mkdir(parents=True, exist_ok=True)
             file_path = self.data_dir / parser_name
             mode = 'w'
             if file_path.exists():

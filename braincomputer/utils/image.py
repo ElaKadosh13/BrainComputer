@@ -11,10 +11,9 @@ class Image:
         return self.image_data is None
 
     def serialize(self):
-        if self.is_empty:
-            return b''
+        if self.is_empty():
+            return b''.join([struct.pack('II', *(0, 0))])
         d = [struct.pack('I', self.width), struct.pack('I', self.height), self.image_data]
-        print(d)
         return b''.join(d)
 
 
@@ -24,11 +23,12 @@ class ColorImage(Image):
 
     @classmethod
     def deserialize(cls, serialized_data):
-        print("image deserialize")
-        print(serialized_data)
         width, = struct.unpack('I', serialized_data.read(4))
         height, = struct.unpack('I', serialized_data.read(4))
-        image_data = serialized_data.read(width * height * 3)  # rgb triplet for each pixel
+        if width != 0 and height != 0:
+            image_data = serialized_data.read(width * height * 3)  # rgb triplet for each pixel
+        else:
+            image_data = None
         return ColorImage(width, height, image_data)
 
 
@@ -40,5 +40,8 @@ class DepthImage(Image):
     def deserialize(cls, serialized_data):
         width, = struct.unpack('I', serialized_data.read(4))
         height, = struct.unpack('I', serialized_data.read(4))  # 4 byte int
-        image_data = serialized_data.read(width * height * 4)  # float for each pixel
+        if width != 0 and height != 0:
+            image_data = serialized_data.read(width * height * 4)  # float for each pixel
+        else:
+            image_data = None
         return DepthImage(width, height, image_data)
