@@ -40,7 +40,6 @@ class Context:
 
 
 class Handler(threading.Thread):
-
     lock = threading.Lock()
 
     def __init__(self, connection, data_dir, parsers):
@@ -54,7 +53,6 @@ class Handler(threading.Thread):
         # receive hello
         deserialized_hello = Hello.deserialize(self.connection.receive_message())
         # send config
-        # todo - change hardcoded parsers to all parsers
         config_fields = self.parsers.parsers_functions.keys()
         serialized_config = Config(len(config_fields), config_fields).serialize()
         self.connection.send_message(serialized_config)
@@ -62,15 +60,17 @@ class Handler(threading.Thread):
         deserialized_snapshot = Snapshot.deserialize(self.connection.receive_message())
         # handle files
         directory_path = self.data_root / str(deserialized_hello.user_id)
-        dt, = deserialized_snapshot.datetime # /1000 to miliseconds
-        dattime = datetime.fromtimestamp(dt/ 1000).strftime('%Y-%m-%d_%H-%M-%S-%f')  # todo - make sure the ts is ok by the format
+        print(deserialized_snapshot.datetime)
+        dt = deserialized_snapshot.datetime  # /1000 to miliseconds
+        dattime = datetime.fromtimestamp(dt / 1000).strftime(
+            '%Y-%m-%d_%H-%M-%S-%f')  # todo - make sure the ts is ok by the format
         directory = directory_path / dattime
         # handle parsers
-        # todo - replace this with for on all parsers
         client_context = Context(directory)
         self.parsers.parse(client_context, deserialized_snapshot)
 
 
 if __name__ == '__main__':
     import sys
+
     sys.exit()

@@ -10,16 +10,20 @@ class Image:
     def is_empty(self):
         return self.image_data is None
 
-    def serialize(self):
-        if self.is_empty():
-            return b''.join([struct.pack('II', *(0, 0))])
-        d = [struct.pack('I', self.width), struct.pack('I', self.height), self.image_data]
-        return b''.join(d)
+# todo - move serialize to image if possible
 
 
 class ColorImage(Image):
     def __repr__(self):
         return f'ColorImage(width={self.width}, height={self.height})'
+
+    def serialize(self):
+        if self.is_empty():
+            return b''.join([struct.pack('II', *(0, 0))])
+        d = [struct.pack('I', self.width), struct.pack('I', self.height), self.image_data]
+        print("bbbbbbbb")
+        print(type(d))
+        return b''.join(d)
 
     @classmethod
     def deserialize(cls, serialized_data):
@@ -35,6 +39,18 @@ class ColorImage(Image):
 class DepthImage(Image):
     def __repr__(self):
         return f'DepthImage(width={self.width}, height={self.height})'
+
+    def serialize(self):
+        print("serialize depth image")
+        if self.is_empty():
+            return b''.join([struct.pack('sII', *(0, 0, 0))])
+        d = [struct.pack('I', self.width), struct.pack('I', self.height), self.image_data]
+        print("non empty depth image")
+        print("aaaaaaa")
+        print(type(d))
+        x = b''.join(d)
+        print("ddddddddddddddddddddddddd")
+        return x
 
     @classmethod
     def deserialize(cls, serialized_data):

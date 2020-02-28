@@ -18,4 +18,5 @@ def upload_snapshots(address, file_path):
             c = connection.receive_message()
             deserialized_config = Config.deserialize(c)
             # send snapshot
-            connection.send_message(snapshot.serialize(deserialized_config))
+            serialized_snapshot = snapshot.serialize(deserialized_config)
+            connection.send_message(serialized_snapshot)
