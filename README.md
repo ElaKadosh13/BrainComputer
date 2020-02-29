@@ -8,26 +8,22 @@ An example package. See [full documentation](https://advanced-system-design-foob
 
 1. Clone the repository and enter it:
 
-    ```sh
+    ```
     $ git clone git@github.com:ElaKadosh13/BrainComputer.git
-    ...
     $ cd braincomputer/
     ```
 
 2. Run the installation script and activate the virtual environment:
 
-    ```sh
+    ```
     $ ./scripts/install.sh
-    ...
     $ source .env/bin/activate
     ```
 
 3. To check that everything is working as expected, run the tests:
 
-
-    ```sh
+    ```
     $ pytest tests/
-    ...
     ```
 
 ## Usage
@@ -70,4 +66,4 @@ subcommands:
 ```sh
 $ python -m braincomputer run-server "127.0.0.1:5000" "tmp/data"
 $ python -m braincomputer run-webserver "127.0.0.1:5000" "tmp/data"
-$ python -m braincomputer upload-thought "127.0.0.1:5000" 1 "my thought"
+$ python -m braincomputer upload-snapshot "127.0.0.1:5000" sample/sample.mind.gz

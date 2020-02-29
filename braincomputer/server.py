@@ -60,8 +60,7 @@ class Handler(threading.Thread):
         deserialized_snapshot = Snapshot.deserialize(self.connection.receive_message())
         # handle files
         directory_path = self.data_root / str(deserialized_hello.user_id)
-        print(deserialized_snapshot.datetime)
-        dt = deserialized_snapshot.datetime  # /1000 to miliseconds
+        dt, = deserialized_snapshot.datetime  # /1000 to miliseconds
         dattime = datetime.fromtimestamp(dt / 1000).strftime(
             '%Y-%m-%d_%H-%M-%S-%f')  # todo - make sure the ts is ok by the format
         directory = directory_path / dattime

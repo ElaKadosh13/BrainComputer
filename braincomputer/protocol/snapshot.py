@@ -5,7 +5,7 @@ from braincomputer.utils.image import ColorImage, DepthImage
 
 class Snapshot:
     def __init__(self, datetime, translation=(0, 0, 0), rotation=(0, 0, 0, 0),
-                 color_image=None, depth_image=None,
+                 color_image=None, depth_image=DepthImage(0, 0, []),
                  user_feelings=(0, 0, 0, 0)):
         self.datetime = datetime
         self.translation = translation
@@ -19,112 +19,56 @@ class Snapshot:
                     f'color_image={self.color_image}, depth_image={self.depth_image}, user_feelings={self.user_feelings})'
 
     def serialize(self, config):
-        print("@@@@@@@@@@@@@@@")
-        fields = config.fields
-        if 'translation' in fields:
-            translation = self.translation
-        else:
-            translation = (0, 0, 0)
-        if 'rotation' in fields:
-            rotation = self.rotation
-        else:
-            rotation = (0, 0, 0, 0)
-        feelings = self.user_feelings if 'feelings' in fields else (0, 0, 0, 0)
-        if 'color_image' in fields:
-            w=self.color_image.width
-            h=self.color_image.height
-            data = self.color_image.image_data
-        else:
-            w=0
-            h=0
-            data=b''
+        color_image_width = color_image_height = depth_image_width = depth_image_height = 0
+        color_image_data = b''
+        depth_image_data = []
 
-        if 'depth_image' in fields:
-            d_w=self.depth_image.width
-            d_h=self.depth_image.height
-            d_data = self.depth_image.image_data
-        else:
-            d_w =0
-            d_h =0
-            d_data=[]
+        if "color_image" in config.fields:
+            color_image_height = self.color_image.height
+            color_image_width = self.color_image.width
+            color_image_data = self.color_image.image_data
 
-        print("###############")
-        params = [self.datetime, *translation, *rotation, h, w]
-        if data:
-            params.append(data)
-        params.extend([d_w, d_h])
-        params.extend(d_data)
-        print("!!!!!!!!!!!!!!")
-        return struct.pack(f'<QdddddddII{len(data)}sII{len(d_data)}fffff',
-                           *params, *feelings)
-        #config_fields = config.fields
-        #serialized_snapshot = [struct.pack('Q', self.datetime)]
-        #if "translation" in config_fields:
-        #    serialized_snapshot.append(struct.pack('ddd', *self.translation))
-        #else:
-        #    serialized_snapshot.append(struct.pack('ddd', *(0, 0, 0)))
-        #if "rotation" in config_fields:
-        #    serialized_snapshot.append(struct.pack('dddd', *self.rotation))
-        #else:
-        #    serialized_snapshot.append(struct.pack('dddd', *(0, 0, 0, 0)))
-        #if "feelings" in config_fields:
-        #    serialized_snapshot.append(struct.pack('ffff', *self.user_feelings))
-        #else:
-        #    serialized_snapshot.append(struct.pack('ffff', *(0, 0, 0, 0)))
-        #if "color_image" in config_fields:
-        #    serialized_snapshot.append(self.color_image.serialize())
-        #else:
-        #    serialized_snapshot.append(ColorImage(0, 0, None).serialize())
-        #if "depth_image" in config_fields:
-        #     print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-        #     serialized_snapshot.append(self.depth_image.serialize())
-        #else:
-        #    print("depth image none")
-        #    serialized_snapshot.append(DepthImage(0, 0, None).serialize())
-        #return b''.join(serialized_snapshot)
+        if "depth_image" in config.fields:
+            depth_image_height = self.depth_image.height
+            depth_image_width =  self.depth_image.width
+            depth_image_data = self.depth_image.image_data
+
+        color_image_size = len(color_image_data)
+        depth_image_size = len(depth_image_data)
+        serialized_snapshot = struct.pack(f'<QdddddddII{color_image_size}sII{depth_image_size}fffff',
+                                          self.datetime, *self.translation, *self.rotation,
+                                          color_image_height, color_image_width, color_image_data,
+                                          depth_image_height, depth_image_width, *depth_image_data,
+                                          *self.user_feelings)
+        return serialized_snapshot
 
     @classmethod
     def deserialize(cls, serialized_data):
+        stream_data = SerializedDataStream(io.BytesIO(serialized_data))
+        timestamp = stream_data.deserialize('Q')
+        translation = stream_data.deserialize('ddd')
+        rotation = stream_data.deserialize('dddd')
 
-        #stream_data = io.BytesIO(serialized_data)
-        #timestamp = struct.unpack('Q', stream_data.read(8))
-        #translation = struct.unpack('ddd', stream_data.read(24))
-        #rotation = struct.unpack('dddd', stream_data.read(32))
-        #user_feelings = struct.unpack('ffff', stream_data.read(16))
-        #color_image = ColorImage.deserialize(stream_data)
-        #print("depth image deserialize")
-        #depth_image = DepthImage.deserialize(stream_data)
-        #print("depth image deserialize 2")
-        #return Snapshot(timestamp, translation, rotation, color_image, depth_image, user_feelings)
-        stream_data = io.BytesIO(serialized_data)
-        timestamp, translation_x, translation_y, translation_z, \
-        rotation_x, rotation_y, rotation_z, rotation_w, \
-        height, width = binary_from_stream(stream_data, 'QdddddddII')
-        pixels = None
-        #if 'color_image' in fields:
-        pixels = binary_from_stream(stream_data, f'{3 * height * width}s')[0]
-        depth_height, depth_width = binary_from_stream(stream_data, 'II')
+        color_image_height, = stream_data.deserialize('I')
+        color_image_width, = stream_data.deserialize('I')
+        color_image_size = color_image_height * color_image_width * 3
+        color_image_data = stream_data.deserialize(f'{color_image_size}s')
+        color_image = ColorImage(color_image_width, color_image_height, color_image_data[0])
 
-        depth_pixels = None
-        #if 'depth_image' in fields:
-        depth_pixels = binary_from_stream(stream_data, f'{depth_height * depth_width}f')
+        depth_image_height, = stream_data.deserialize('I')
+        depth_image_width, = stream_data.deserialize('I')
+        depth_image_size = depth_image_height * depth_image_width
+        depth_image_data = stream_data.deserialize(f'{depth_image_size}f')
+        depth_image = DepthImage(depth_image_width, depth_image_height, depth_image_data)
 
-        hunger, thirst, exhaustion, happiness = binary_from_stream(stream_data, 'ffff')
+        user_feelings = stream_data.deserialize('ffff')
 
-        return Snapshot(timestamp, (translation_x, translation_y, translation_z),
-                        (rotation_x, rotation_y, rotation_z, rotation_w),
-                        ColorImage(width, height, pixels),
-                        DepthImage(depth_width, depth_height, depth_pixels),
-                        (hunger, thirst, exhaustion, happiness))
+        return Snapshot(timestamp, translation, rotation, color_image, depth_image, user_feelings)
 
 
-def binary_from_stream(stream, struct_format):
-    size = struct.calcsize(struct_format)
-    print("size")
-    print(size)
-    buf = stream.read(size)
-    if buf is None:
-        return None
-    print("bfsssssss")
-    res = struct.unpack(struct_format, buf)
-    return res
+class SerializedDataStream:
+    def __init__(self, serialized_data_stream):
+        self.serialized_data_stream = serialized_data_stream
+        
+    def deserialize(self, by_format):
+        return struct.unpack(by_format, self.serialized_data_stream.read(struct.calcsize(by_format)))
