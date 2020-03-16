@@ -1,11 +1,14 @@
+import os
+import pathlib
 import struct
 import io
+import json
 from braincomputer.utils.image import ColorImage, DepthImage
-
+from datetime import datetime
 
 class Snapshot:
     def __init__(self, datetime, translation=(0, 0, 0), rotation=(0, 0, 0, 0),
-                 color_image=None, depth_image=DepthImage(0, 0, []),
+                 color_image=None, depth_image=None,
                  user_feelings=(0, 0, 0, 0)):
         self.datetime = datetime
         self.translation = translation
@@ -13,10 +16,41 @@ class Snapshot:
         self.color_image = color_image
         self.depth_image = depth_image
         self.user_feelings = user_feelings
+        self.root_directory = ""
 
     def __repr__(self):
         return f'Snapshot(datetime={self.datetime}, translation={self.translation}, rotation={self.rotation},' \
                     f'color_image={self.color_image}, depth_image={self.depth_image}, user_feelings={self.user_feelings})'
+
+    def to_json(self, root, user, dt):
+        dattime = datetime.fromtimestamp(dt / 1000).strftime('%Y-%m-%d_%H-%M-%S-%f')
+        print("converting snapshot to json")
+        self.color_image.path_to_data = root + user + "_" + dattime + "_color_image_data"
+        Snapshot.save_image_data(self.color_image.path_to_data, self.color_image.image_data)
+        self.depth_image.path_to_data = root + user + "_" + dattime + "_depth_image_data"
+        Snapshot.save_image_data(self.depth_image.path_to_data,
+                                 struct.pack(f'{len(self.depth_image.image_data)}f', *self.depth_image.image_data))
+
+        return json.dumps({
+            'timestamp': self.datetime,
+            'translation': self.translation,
+            'rotation': self.rotation,
+            'color_image': {'width': self.color_image.width, 'height': self.color_image.height,
+                            'path': self.color_image.path_to_data},
+            'depth_image': {'width': self.depth_image.width, 'height': self.depth_image.height,
+                            'path': self.depth_image.path_to_data},
+            'feelings': self.user_feelings
+        })
+
+    @classmethod
+    def save_image_data(cls, path, data):
+        mode = 'wb'
+        if os.path.exists(path):
+            mode = 'ab'
+        format_path = pathlib.Path(path)
+        with format_path.open(mode) as f:
+            print(len(data))
+            f.write(data)
 
     def serialize(self, config):
         color_image_width = color_image_height = depth_image_width = depth_image_height = 0
@@ -30,11 +64,12 @@ class Snapshot:
 
         if "depth_image" in config.fields:
             depth_image_height = self.depth_image.height
-            depth_image_width =  self.depth_image.width
+            depth_image_width = self.depth_image.width
             depth_image_data = self.depth_image.image_data
 
         color_image_size = len(color_image_data)
         depth_image_size = len(depth_image_data)
+
         serialized_snapshot = struct.pack(f'<QdddddddII{color_image_size}sII{depth_image_size}fffff',
                                           self.datetime, *self.translation, *self.rotation,
                                           color_image_height, color_image_width, color_image_data,
@@ -59,6 +94,7 @@ class Snapshot:
         depth_image_width, = stream_data.deserialize('I')
         depth_image_size = depth_image_height * depth_image_width
         depth_image_data = stream_data.deserialize(f'{depth_image_size}f')
+
         depth_image = DepthImage(depth_image_width, depth_image_height, depth_image_data)
 
         user_feelings = stream_data.deserialize('ffff')

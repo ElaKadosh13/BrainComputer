@@ -4,6 +4,7 @@ class Image:
         self.width = width
         self.height = height
         self.image_data = image_data
+        self.path_to_data = ""
 
     def is_empty(self):
         return self.image_data is None
