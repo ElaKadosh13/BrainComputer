@@ -12,8 +12,10 @@ class Saver:
 
     def callback(self, ch, method, properties, body):
         print("in callback, saver data:")
-        print(body)
-        self.db.save_to_db("translation", body)
+        parser_key = method.routing_key
+
+
+        self.db.save_to_db(body, parser_key)
 
 
     def handle_queue(self):

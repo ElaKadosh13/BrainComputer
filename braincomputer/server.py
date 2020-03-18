@@ -7,6 +7,7 @@ queue_name = 'queue'
 
 
 def run_server(address, data):
+    print("starting server")
     tuple_address = address.split(":")
     mq = Mq()
     mq.create_queue(queue_name)
@@ -30,8 +31,9 @@ class Handler(threading.Thread):
         print("server running")
         # receive hello
         deserialized_hello = Hello.deserialize(self.connection.receive_message())
+        print(deserialized_hello)
         # send config
-        config_fields = ["feelings", "translation", "color_image", "depth_image"] #todo -fix config? #self.parsers.parsers_functions.keys()
+        config_fields = ["feelings", "pose", "color_image", "depth_image"] #todo -fix config? #self.parsers.parsers_functions.keys()
         serialized_config = Config(len(config_fields), config_fields).serialize()
         self.connection.send_message(serialized_config)
         # receive snapshot
@@ -43,7 +45,7 @@ class Handler(threading.Thread):
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
                                                           str(deserialized_hello.user_id),
                                                           deserialized_snapshot.datetime[0])
-            self.mq.send_to_queue(queue_name, json_snapshot)
+            self.mq.send_to_queue(queue_name, json_snapshot, '')
         finally:
             Handler.lock.release()
 

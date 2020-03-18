@@ -6,6 +6,7 @@ import json
 from braincomputer.utils.image import ColorImage, DepthImage
 from datetime import datetime
 
+
 class Snapshot:
     def __init__(self, datetime, translation=(0, 0, 0), rotation=(0, 0, 0, 0),
                  color_image=None, depth_image=None,
