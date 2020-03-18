@@ -26,13 +26,15 @@ class Snapshot:
     def to_json(self, root, user, dt):
         dattime = datetime.fromtimestamp(dt / 1000).strftime('%Y-%m-%d_%H-%M-%S-%f')
         print("converting snapshot to json")
-        self.color_image.path_to_data = root + user + "_" + dattime + "_color_image_data"
+
+        self.color_image.path_to_data = root + str(user.user_id) + "_" + dattime + "_color_image_data"
         Snapshot.save_image_data(self.color_image.path_to_data, self.color_image.image_data)
-        self.depth_image.path_to_data = root + user + "_" + dattime + "_depth_image_data"
+        self.depth_image.path_to_data = root + str(user.user_id) + "_" + dattime + "_depth_image_data"
         Snapshot.save_image_data(self.depth_image.path_to_data,
                                  struct.pack(f'{len(self.depth_image.image_data)}f', *self.depth_image.image_data))
 
         return json.dumps({
+            'user': {'id': user.user_id, 'name': user.user_name, 'birthday': user.user_birthday, 'gender': user.user_gender},
             'timestamp': self.datetime,
             'translation': self.translation,
             'rotation': self.rotation,

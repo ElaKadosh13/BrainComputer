@@ -15,7 +15,8 @@ def parse_color_image(snapshot):
     image = PIL.frombytes('RGB', (color_image_width, color_image['height']), image_data)
     color_image_path = color_image_data_path + ".jpg"
     image.save(color_image_path)
-    return json.dumps({'width': color_image_width,
+    return json.dumps({'user': data['user'],
+                       'width': color_image_width,
                        'height': color_image_height,
                         'path': color_image_path})
 

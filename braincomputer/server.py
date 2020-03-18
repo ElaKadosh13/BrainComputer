@@ -43,7 +43,7 @@ class Handler(threading.Thread):
         print("sending to queue")
         try:
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
-                                                          str(deserialized_hello.user_id),
+                                                          deserialized_hello,
                                                           deserialized_snapshot.datetime[0])
             self.mq.send_to_queue(queue_name, json_snapshot, '')
         finally:

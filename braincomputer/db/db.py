@@ -18,26 +18,40 @@ class Db:
         self.image_table = ImageTable(metadata)
         self.users_table = UsersTable(metadata)
         metadata.create_all(self.engine)
+        #delete all tables - metadata.drop_all(engine)
 
     def save_to_db(self, data, parser):
         json_data = json.loads(data)
         print("in save to db")
         insert = None
+        user = json_data['user']
+        user_id = user['id']
+        user_query = self.users_table.query(user_id)
+        connection = self.engine.connect()
+        result = connection.execute(user_query)
+        if not result.first():
+             print("new user")
+             insert_user = self.users_table.insert(user_id, user['name'], user['birthday'], user['gender'])
+             connection.execute(insert_user)
+
+        #todo if user doesnt exist add it to users table
+        #user_name  user_birthday, user_feelings = user
+        print("!!!!!!!!!")
         if parser == 'pose':
             print("'''in pose")
             rotation_x, rotation_y, rotation_z, rotation_w = json_data['rotation']
             translation_x, translation_y, translation_z = json_data['translation']
-            insert = self.pose_table.insert(42, rotation_x, rotation_y, rotation_z, rotation_w, translation_x, translation_y, translation_z)
+            insert = self.pose_table.insert(user_id, rotation_x, rotation_y, rotation_z, rotation_w, translation_x, translation_y, translation_z)
         if parser == 'feelings':
-            feelings_x, feelings_y, feelings_z, feelings_w = json_data
-            insert = self.feelings_table.insert(42, feelings_x, feelings_y, feelings_z, feelings_w)
+            feelings_x, feelings_y, feelings_z, feelings_w = json_data['feelings']
+            insert = self.feelings_table.insert(user_id, feelings_x, feelings_y, feelings_z, feelings_w)
         if parser == 'color_image' or parser == 'depth_image':
             width = json_data['width']
             height = json_data['height']
             path = json_data['path']
-            insert = self.image_table.insert(42, width, height, path, parser)
+            insert = self.image_table.insert(user_id, width, height, path, parser)
 
-        connection = self.engine.connect()
+
         result = connection.execute(insert)
 
         #todo - delte those prints
@@ -123,7 +137,13 @@ class UsersTable:
                            Column('gender', String, nullable=False))
 
     def insert(self, userid, name, birthday, gender):
+        print("in insert")
         return self.table.insert().values(userid=userid,
                                           name=name,
                                           birthday=birthday,
                                           gender=gender)
+
+    def query(self, user_id):
+        print("in qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
+        print(user_id)
+        return select([self.table]).where(self.table.columns.userid == user_id)
