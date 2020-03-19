@@ -64,6 +64,10 @@ class Db:
             query = select([self.image_table.table])
         for row in connection.execute(query):
             print(dict(row))
+        print("users table!!!!")
+        q = select([self.users_table.table])
+        for row in connection.execute(q):
+            print(dict(row))
 
 
 class PoseTable:

@@ -52,6 +52,8 @@ class Parser:
     def create_queue(self):
         queue_name = 'queue'
         self.mq.create_queue(queue_name)
+        parsed_queue_name = 'parsed'
+        self.mq.create_queue(parsed_queue_name)
         self.mq.consume_queue(queue_name, self.callback)
 
 
