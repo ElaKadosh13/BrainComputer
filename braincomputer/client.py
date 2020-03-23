@@ -8,7 +8,7 @@ from braincomputer.utils.reader import Reader
 def upload_snapshots(address, file_path):
     reader = Reader(file_path)
     for snapshot in reader:
-        time.sleep(0.5)  # todo - maybe not necessary??
+        time.sleep(1)  # todo - maybe not necessary??
         tuple_address = address.split(":")
         with Connection.connect(tuple_address[0], int(tuple_address[1])) as connection:
             # send hello

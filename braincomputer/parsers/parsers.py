@@ -51,9 +51,9 @@ class Parser:
 
     def create_queue(self):
         queue_name = 'queue'
-        self.mq.create_queue(queue_name)
+        self.mq.create_queue(queue_name, '5672')
         parsed_queue_name = 'parsed'
-        self.mq.create_queue(parsed_queue_name)
+        self.mq.create_queue(parsed_queue_name, '5672')
         self.mq.consume_queue(queue_name, self.callback)
 
 
@@ -63,5 +63,3 @@ def run_parser(parser_type):
     print(parser_type)
     parser = Parser(parsers.parsers_functions, parser_type)
     parser.create_queue()
-
-

@@ -10,7 +10,8 @@ def run_server(address, data):
     print("starting server")
     tuple_address = address.split(":")
     mq = Mq()
-    mq.create_queue(queue_name)
+
+    mq.create_queue(queue_name,'5672')
     with Listener(int(tuple_address[1]), tuple_address[0]) as listener:
         while True:
             connection = listener.accept()

@@ -5,10 +5,13 @@ class Mq:
     def __init__(self):
         self.channel = None
 
-    def create_queue(self, name):
-        connection_parameters = pika.ConnectionParameters(
-            'localhost')  # 'rabbitmq://127.0.0.1', '5672') #todo 'rabbitmq://127.0.0.1:5672/'
+    def create_queue(self, name, port):
+        print("creting queue")
+        connection_parameters = pika.ConnectionParameters('127.0.0.1', port) #'localhost')   #todo 'rabbitmq://127.0.0.1:5672/'
+        print(connection_parameters)
+        print(pika.BlockingConnection(connection_parameters))
         connection = pika.BlockingConnection(connection_parameters)
+        print("connected mq")
         self.channel = connection.channel()
         self.channel.exchange_declare(exchange=name, exchange_type='fanout')
 

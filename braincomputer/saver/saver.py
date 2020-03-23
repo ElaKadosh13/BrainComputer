@@ -20,7 +20,7 @@ class Saver:
 
     def handle_queue(self):
         queue_name = 'parsed'
-        self.mq.create_queue(queue_name)
+        self.mq.create_queue(queue_name, '5672')
         self.mq.consume_queue(queue_name, self.callback)
 
 
