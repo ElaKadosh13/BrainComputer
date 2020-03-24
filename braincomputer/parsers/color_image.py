@@ -16,6 +16,7 @@ def parse_color_image(snapshot):
     color_image_path = color_image_data_path + ".jpg"
     image.save(color_image_path)
     return json.dumps({'user': data['user'],
+                       'ts': data['timestamp'],
                        'width': color_image_width,
                        'height': color_image_height,
                         'path': color_image_path})

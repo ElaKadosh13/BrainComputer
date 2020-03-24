@@ -47,7 +47,7 @@ class Parser:
         print("in callback, parsed data:")
         parsed = self.parsing_function[self.parser_type](body)
         print(parsed)
-        self.mq.send_to_queue('parsed', parsed, self.parser_type)
+        self.mq.send_to_queue('parsed', parsed)
 
     def create_queue(self):
         queue_name = 'queue'

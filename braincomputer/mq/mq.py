@@ -22,6 +22,6 @@ class Mq:
         self.channel.basic_consume(queue=q_name, on_message_callback=callback, auto_ack=True)
         self.channel.start_consuming()
 
-    def send_to_queue(self, name, body, parser_key):
+    def send_to_queue(self, name, body):
         print("sending to queue")
-        self.channel.basic_publish(exchange=name, routing_key=parser_key, body=body)
+        self.channel.basic_publish(exchange=name, routing_key='', body=body)
