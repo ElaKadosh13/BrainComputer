@@ -1,7 +1,7 @@
 import gzip
 import struct
 import os
-from braincomputer import messages_pb2
+from braincomputer.proto import messages_pb2
 from braincomputer.protocol import Snapshot
 from braincomputer.utils.image import ColorImage, DepthImage
 from datetime import datetime

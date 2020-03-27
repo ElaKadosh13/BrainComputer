@@ -25,7 +25,7 @@ class Parsers:
         path_to_import = pathlib.Path((dirname(abspath(__file__)))).absolute()
         sys.path.insert(0, str(path_to_import.parent))
         for p in path_to_import.iterdir():
-            if p.name != "parsers.py" and p.name != "__init__.py":
+            if p.name != "parsers.py" and not p.name.startswith("__"):
                 import_module_name = f'braincomputer.{path_to_import.name}.{p.stem}'
                 importlib.import_module(f'{import_module_name}', package=__package__)
                 module = sys.modules[import_module_name]
