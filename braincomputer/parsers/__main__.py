@@ -19,8 +19,9 @@ def main(quiet=False, traceback=False):
 
 @main.command("run-parser", short_help="run parser by type")
 @click.argument("parser_type", type=str)
-def run_p(parser_type):
-    log(run_parser(parser_type))
+@click.argument("mq_url", type=str)
+def run_p(parser_type, mq_url):
+    log(run_parser(parser_type, mq_url))
 
 
 if __name__ == '__main__':

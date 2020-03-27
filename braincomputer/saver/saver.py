@@ -5,10 +5,10 @@ from braincomputer.mq.mq import Mq
 
 
 class Saver:
-    def __init__(self):
-        self.mq = Mq()
+    def __init__(self, mq_url, db_url):
+        self.mq = Mq(mq_url)
         print("cerated mq")
-        self.db = Db()
+        self.db = Db(db_url)
         self.db.create_db()
         print("created db")
 
@@ -16,16 +16,15 @@ class Saver:
         print("in callback, saver data:")
         self.db.save_to_db(body)
 
-
     def handle_queue(self):
         queue_name = 'parsed'
-        self.mq.create_queue(queue_name, '5672')
+        self.mq.create_queue(queue_name)
         print("created queue, consuming")
         self.mq.consume_queue(queue_name, self.callback)
 
 
-def run_saver():
-    saver = Saver()
+def run_saver(mq_url, db_url):
+    saver = Saver(mq_url, db_url)
     print('saving...')
     saver.handle_queue()
 

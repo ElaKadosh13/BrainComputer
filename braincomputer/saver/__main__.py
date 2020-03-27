@@ -14,8 +14,10 @@ def main(quiet=False, traceback=False):
     log.traceback = traceback
 
 @main.command("run-saver", short_help="run saver")
-def run_sa():
-    log(run_saver())
+@click.argument("mq_url", type=str)
+@click.argument("db_url", type=str)
+def run_sa(mq_url, db_url):
+    log(run_saver(mq_url, db_url))
 
 if __name__ == '__main__':
     try:

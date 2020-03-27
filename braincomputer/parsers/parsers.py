@@ -38,10 +38,10 @@ class Parsers:
 
 
 class Parser:
-    def __init__(self, parsing_function, parser_type):
+    def __init__(self, parsing_function, parser_type, mq_url):
         self.parsing_function = parsing_function
         self.parser_type = parser_type
-        self.mq = Mq()
+        self.mq = Mq(mq_url)
 
     def callback(self, ch, method, properties, body):
         print("in callback, parsed data:")
@@ -51,15 +51,15 @@ class Parser:
 
     def create_queue(self):
         queue_name = 'queue'
-        self.mq.create_queue(queue_name, '5672')
+        self.mq.create_queue(queue_name)
         parsed_queue_name = 'parsed'
-        self.mq.create_queue(parsed_queue_name, '5672')
+        self.mq.create_queue(parsed_queue_name)
         self.mq.consume_queue(queue_name, self.callback)
 
 
-def run_parser(parser_type):
+def run_parser(parser_type, mq_url):
     parsers = Parsers()
     print('parsing...')
     print(parser_type)
-    parser = Parser(parsers.parsers_functions, parser_type)
+    parser = Parser(parsers.parsers_functions, parser_type, mq_url)
     parser.create_queue()

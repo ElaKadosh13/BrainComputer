@@ -14,7 +14,7 @@ def main(quiet=False, traceback=False):
     log.traceback = traceback
 
 
-@main.command("upload-snapshots", short_help="upload client thought")
+@main.command("upload-sample", short_help="upload client thoughts")
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default=8000)
 @click.argument("path", type=str)

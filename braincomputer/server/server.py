@@ -46,6 +46,7 @@ class Handler(threading.Thread):
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
                                                           deserialized_hello,
                                                           deserialized_snapshot.datetime[0])
+            print("snapshot converted")
             self.mq.send_to_queue(queue_name, json_snapshot)
         finally:
             Handler.lock.release()

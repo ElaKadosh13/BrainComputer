@@ -47,10 +47,13 @@ class Snapshot:
 
     @classmethod
     def save_image_data(cls, path, data):
-        mode = 'wb'
+        mode = 'w+b'
+        print("1")
         if os.path.exists(path):
+            print("2")
             mode = 'ab'
         format_path = pathlib.Path(path)
+        print(format_path)
         with format_path.open(mode) as f:
             print(len(data))
             f.write(data)
