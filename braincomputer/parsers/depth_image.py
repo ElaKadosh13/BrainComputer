@@ -23,9 +23,7 @@ def parse_depth_image(snapshot):
     matplotlib.pyplot.imsave(image_path, image)
     return json.dumps({'user': data['user'],
                        'ts': data['timestamp'],
-                       'width': depth_image_width,
-                       'height': depth_image_height,
-                       'path': image_path})
+                       "depth_image": [depth_image_width, depth_image_height, image_path]})
 
 
 parse_depth_image.field = 'depth_image'

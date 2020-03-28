@@ -9,7 +9,6 @@ class Saver:
         self.mq = Mq(mq_url)
         print("cerated mq")
         self.db = Db(db_url)
-        self.db.create_db()
         print("created db")
 
     def callback(self, ch, method, properties, body):

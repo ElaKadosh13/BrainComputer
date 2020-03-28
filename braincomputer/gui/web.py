@@ -1,7 +1,10 @@
+import os
 import pathlib
 from datetime import datetime
 
 from flask import Flask
+
+from braincomputer.db import Db
 
 _INDEX_HTML = '''
 <html>
@@ -16,7 +19,7 @@ _INDEX_HTML = '''
 </html>
 '''
 _USER_LINE_HTML = '''
-<li><a href="/users/{user_id}">user {user_id}</a></li>
+<li><a href="/users/{user_id}">User: {user_id}</a></li>
 '''
 _USERS_HTML = '''
 <html>
@@ -24,17 +27,33 @@ _USERS_HTML = '''
         <title>Brain Computer Interface: User {user_id}</title>
     </head>
     <body>
-        <table>
+        <p>Name: {user_name}</p>
+         <p>Gender: {user_gender}</p> 
+         <p>Birthday: {user_birthday}</p>
+         <p>Snapshots timestamps: </p>
+        <ul>
             {thoughts}
-        </table>
+        </ul>
     </body>
 </html>
 '''
 _THOUGHT_LINE_HTML = '''
-<tr>
-    <td>{timestamp}</td>
-    <td>{thought}</td>
-</tr>
+<li><a href="/users/{user_id}/{ts}">Timestamp: {timestamp}</a></li>
+'''
+
+_SNAPSHOT_HTML = '''
+<html>
+    <head>
+        <title>brain computer interface: user {user_id} timestamp: {timestamp}</title>
+    </head>
+    <body>
+        <p>user {user_id} timestamp: {timestamp}</p>
+        <p>pose:</br>translation: {translation}</br>rotation: {rotation}</p>
+        <p>feelings:{feelings}</p>
+        <p>color_image: </br> <img alt="color image missing" src={color_image_path} width={color_image_width}, height={color_image_height}></p>
+        <p>depth_image: </br> <img alt="depth image missing" src={depth_image_path} width={depth_image_width}, height={depth_image_height}></p>
+   </body>
+</html>
 '''
 
 root_path = pathlib.Path(__file__).absolute().parent.parent
@@ -42,55 +61,85 @@ directory_path = ""
 website = Flask(__name__)
 
 
-def webserver_routers(dir_path):
+def webserver_routers(db):
     @website.route('/')
     def index():
+        print("in index")
         users_lines_html = []
-        for user in dir_path.iterdir():
-            id = user.name
+        print(db.client.list_database_names())
+        users = db.get_all_users()
+        print(users)
+        for user in list(users):
+            print(user)
+            id = user['id']
             users_lines_html.append(_USER_LINE_HTML.format(user_id=id))
-            # add all the sub htmls - users htmls
         users_list = '\n'.join(users_lines_html)
         index_html_page = _INDEX_HTML.format(users=users_list)
         # create the index html
         return index_html_page
 
+    ##todo - replace thought by snapshot
     @website.route('/users/<user_id>')
     def user(user_id):
-        current_user_directory_path = dir_path / user_id
+        print("user_page!!!!!!")
+        print(user_id)
+        user_data = db.get_user_by_id(int(user_id))
+        user_birthday = datetime.fromtimestamp(user_data['birthday'] / 1000).date()
+        user_gender = {'m': 'Male', 'f': 'Female', 'o': 'Other'}[user_data['gender']]
+        print(user_data)
+        thoughts = db.get_snapshots_ts_by_user(int(user_id))
         thoughts_lines_html = []
-        for thought in current_user_directory_path.iterdir():
-            thought_timestamp = datetime\
-                .strptime(thought.stem, '%Y-%m-%d_%H-%M-%S')\
-                .strftime('%Y-%m-%d %H:%M:%S')
-            thought_content = thought.read_text()
-            thoughts_lines_html\
+        for thought in list(thoughts):
+            thought_ts = datetime.fromtimestamp(thought['ts'] / 1000)
+            thoughts_lines_html \
                 .append(_THOUGHT_LINE_HTML
-                        .format(timestamp=thought_timestamp,
-                                thought=thought_content))
+                        .format(user_id=user_id, timestamp=thought_ts, ts=thought['ts']))
         thought_list = '\n'.join(thoughts_lines_html)
-        users_html_page = _USERS_HTML.\
-            format(user_id=user_id, thoughts=thought_list)
+        users_html_page = _USERS_HTML. \
+            format(user_id=user_id, user_name=user_data['name'], user_gender=user_gender,
+                   user_birthday=user_birthday, thoughts=thought_list)
         return users_html_page
 
+    @website.route('/users/<user_id>/<timestamp>')
+    def snapshot(user_id, timestamp):
+        print("snapshot page")
+        snapshot = db.get_snapshot_by_user_and_ts(int(user_id), int(timestamp))
+        print(snapshot)
+        rotation = "missing"
+        translation = "missing"
+        feelings = "missing"
+        color_image_path = ""
+        color_image_height = 100
+        color_image_width = 100
+        depth_image_path = ""
+        depth_image_height = 100
+        depth_image_width = 100
 
-def run_webserver(address, data_dir):
-    global directory_path
-    directory_path = pathlib.Path(data_dir)
-    webserver_routers(directory_path)
-    website.run(address[0], address[1])
+        for data in snapshot:
+            if data == "rotation":
+                rotation = snapshot['rotation']
+            if data == "translation":
+                translation = snapshot['translation']
+            if data == "feelings":
+                feelings = snapshot['feelings']
+            if data == "color_image":
+                color_image_width, color_image_height, color_image_path = snapshot['color_image']
+                color_image_path = color_image_path[17:]
+            if data == "depth_image":
+                depth_image_width, depth_image_height, depth_image_path = snapshot['depth_image']
+                depth_image_path = depth_image_path[17:]
+        return _SNAPSHOT_HTML.format(user_id=user_id, timestamp=timestamp, translation=translation,
+                                     rotation=rotation, feelings=feelings, depth_image_width=depth_image_width,
+                                     depth_image_height=depth_image_height, depth_image_path=depth_image_path,
+                                     color_image_width=color_image_width, color_image_height=color_image_height,
+                                     color_image_path=color_image_path)
 
 
-if __name__ == '__main__':
-    import sys
-    if len(sys.argv) != 3:
-        print(f'USAGE: {sys.argv[0]} <address> <data_dir>')
-        sys.exit()
-    try:
-        address_array = sys.argv[1].split(':')
-        address = (address_array[0], int(address_array[1]))
-        data_dir = sys.argv[2]
-        run_webserver(address, data_dir)
-    except Exception as error:
-        print(f'ERROR: {error}')
-    sys.exit()
+def run_server(host, port, db_url):
+    if db_url.startswith("mongodb"):
+        db = Db(db_url)
+        webserver_routers(db)
+        website.run(host, port)
+        # todo - db.client.close()
+    else:
+        raise Exception("unsupported db")
