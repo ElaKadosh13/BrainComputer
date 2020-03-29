@@ -5,10 +5,11 @@ from datetime import datetime
 from flask import Flask
 
 from braincomputer.db import Db
-from braincomputer.api.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
+from braincomputer.gui.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
+
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
-website = Flask(__name__)
+website = Flask(__name__, static_folder="../static/")
 
 
 def webserver_routers(db):
@@ -59,11 +60,11 @@ def webserver_routers(db):
         translation = "missing"
         feelings = "missing"
         color_image_path = ""
-        color_image_height = 100
-        color_image_width = 100
+        color_image_height = "100"
+        color_image_width = "100"
         depth_image_path = ""
-        depth_image_height = 100
-        depth_image_width = 100
+        depth_image_height = "100"
+        depth_image_width = "100"
 
         for data in snapshot:
             if data == "rotation":
@@ -74,10 +75,11 @@ def webserver_routers(db):
                 feelings = snapshot['feelings']
             if data == "color_image":
                 color_image_width, color_image_height, color_image_path = snapshot['color_image']
-                color_image_path = color_image_path[17:]
+                color_image_path = color_image_path[21:]
+                print(color_image_path)
             if data == "depth_image":
                 depth_image_width, depth_image_height, depth_image_path = snapshot['depth_image']
-                depth_image_path = depth_image_path[17:]
+                #depth_image_path = depth_image_path[13:]
         return _SNAPSHOT_HTML.format(user_id=user_id, timestamp=timestamp, translation=translation,
                                      rotation=rotation, feelings=feelings, depth_image_width=depth_image_width,
                                      depth_image_height=depth_image_height, depth_image_path=depth_image_path,
