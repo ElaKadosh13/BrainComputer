@@ -5,8 +5,7 @@ from datetime import datetime
 from flask import Flask
 
 from braincomputer.db import Db
-from braincomputer.gui.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
-
+from braincomputer.api.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
 website = Flask(__name__)
