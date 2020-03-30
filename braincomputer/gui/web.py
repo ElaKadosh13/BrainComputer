@@ -22,8 +22,7 @@ def webserver_routers(db):
         print(users)
         for user in list(users):
             print(user)
-            id = user['id']
-            users_lines_html.append(_USER_LINE_HTML.format(user_id=id))
+            users_lines_html.append(_USER_LINE_HTML.format(user_id=user['id'], user_name=user['name']))
         users_list = '\n'.join(users_lines_html)
         index_html_page = _INDEX_HTML.format(users=users_list)
         # create the index html
@@ -54,6 +53,8 @@ def webserver_routers(db):
     @website.route('/users/<user_id>/<timestamp>')
     def snapshot(user_id, timestamp):
         print("snapshot page")
+        print(user_id)
+        print(timestamp)
         snapshot = db.get_snapshot_by_user_and_ts(int(user_id), int(timestamp))
         print(snapshot)
         rotation = "missing"
@@ -76,6 +77,7 @@ def webserver_routers(db):
             if data == "color_image":
                 color_image_width, color_image_height, color_image_path = snapshot['color_image']
                 color_image_path = color_image_path[17:]
+                print(color_image_path)
             if data == "depth_image":
                 depth_image_width, depth_image_height, depth_image_path = snapshot['depth_image']
                 depth_image_path = depth_image_path[17:]

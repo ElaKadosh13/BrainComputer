@@ -12,7 +12,7 @@ _INDEX_HTML = '''
 </html>
 '''
 _USER_LINE_HTML = '''
-<li><a href="/users/{user_id}">User: {user_id}</a></li>
+<li><a href="/users/{user_id}">User: {user_id}, Name: {user_name}</a></li>
 '''
 _USERS_HTML = '''
 <html>
