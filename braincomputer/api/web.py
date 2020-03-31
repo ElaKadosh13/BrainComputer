@@ -2,87 +2,89 @@ import os
 import pathlib
 from datetime import datetime
 
+from PIL.Image import Image
 from flask import Flask
 
 from braincomputer.db import Db
-from braincomputer.api.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
+from flask import jsonify
+
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
-website = Flask(__name__)
+website = Flask(__name__, static_folder="../static/")
 
 
 def webserver_routers(db):
-    @website.route('/')
-    def index():
-        print("in index")
-        users_lines_html = []
-        print(db.client.list_database_names())
-        users = db.get_all_users()
-        print(users)
-        for user in list(users):
-            print(user)
-            id = user['id']
-            users_lines_html.append(_USER_LINE_HTML.format(user_id=id))
-        users_list = '\n'.join(users_lines_html)
-        index_html_page = _INDEX_HTML.format(users=users_list)
-        # create the index html
-        return index_html_page
+    @website.route('/users')
+    def users():
+        users = list(db.get_all_users())
+        return jsonify(users)
 
-    ##todo - replace thought by snapshot
     @website.route('/users/<user_id>')
     def user(user_id):
-        print("user_page!!!!!!")
-        print(user_id)
         user_data = db.get_user_by_id(int(user_id))
-        user_birthday = datetime.fromtimestamp(user_data['birthday'] / 1000).date()
-        user_gender = {'m': 'Male', 'f': 'Female', 'o': 'Other'}[user_data['gender']]
-        print(user_data)
-        thoughts = db.get_snapshots_ts_by_user(int(user_id))
-        thoughts_lines_html = []
-        for thought in list(thoughts):
-            thought_ts = datetime.fromtimestamp(thought['ts'] / 1000)
-            thoughts_lines_html \
-                .append(_THOUGHT_LINE_HTML
-                        .format(user_id=user_id, timestamp=thought_ts, ts=thought['ts']))
-        thought_list = '\n'.join(thoughts_lines_html)
-        users_html_page = _USERS_HTML. \
-            format(user_id=user_id, user_name=user_data['name'], user_gender=user_gender,
-                   user_birthday=user_birthday, thoughts=thought_list)
-        return users_html_page
+        if not user_data:
+            return jsonify(missing_error)
+        user_data.pop('_id')
+        user_data['birthday'] = datetime.fromtimestamp(user_data['birthday'] / 1000)
+        user_data['gender'] = {'m': 'Male', 'f': 'Female', 'o': 'Other'}[user_data['gender']]
+        return jsonify(user_data)
 
-    @website.route('/users/<user_id>/<timestamp>')
-    def snapshot(user_id, timestamp):
-        print("snapshot page")
-        snapshot = db.get_snapshot_by_user_and_ts(int(user_id), int(timestamp))
-        print(snapshot)
-        rotation = "missing"
-        translation = "missing"
-        feelings = "missing"
-        color_image_path = ""
-        color_image_height = 100
-        color_image_width = 100
-        depth_image_path = ""
-        depth_image_height = 100
-        depth_image_width = 100
+    @website.route('/users/<user_id>/snapshots')
+    def snapshots(user_id):
+        snapshots_list = list(db.get_snapshots_ts_by_user(int(user_id)))
+        if not snapshots_list:
+            return jsonify(missing_error)
+        for snapshot in snapshots_list:
+            snapshot['id'] = f"{user_id}_{snapshot['ts']}"
+            snapshot['ts'] = datetime.fromtimestamp(snapshot['ts'] / 1000)
+        return jsonify(snapshots_list)
 
-        for data in snapshot:
-            if data == "rotation":
-                rotation = snapshot['rotation']
-            if data == "translation":
-                translation = snapshot['translation']
-            if data == "feelings":
-                feelings = snapshot['feelings']
-            if data == "color_image":
-                color_image_width, color_image_height, color_image_path = snapshot['color_image']
-                color_image_path = color_image_path[17:]
-            if data == "depth_image":
-                depth_image_width, depth_image_height, depth_image_path = snapshot['depth_image']
-                depth_image_path = depth_image_path[17:]
-        return _SNAPSHOT_HTML.format(user_id=user_id, timestamp=timestamp, translation=translation,
-                                     rotation=rotation, feelings=feelings, depth_image_width=depth_image_width,
-                                     depth_image_height=depth_image_height, depth_image_path=depth_image_path,
-                                     color_image_width=color_image_width, color_image_height=color_image_height,
-                                     color_image_path=color_image_path)
+    @website.route('/users/<user_id>/snapshots/<snapshot_id>')
+    def snapshot(user_id, snapshot_id):
+        try:
+            snapshot_ts = snapshot_id.split("_")[1]
+        except:
+            return jsonify("Error: snapshot id must have format: userid_timestamp")
+        snapshot_data = db.get_snapshot_by_user_and_ts(int(user_id), int(snapshot_ts))
+        if not snapshot_data:
+            return jsonify(missing_error)
+        snapshot_data.pop('_id')
+        snapshot_data['ts'] = datetime.fromtimestamp(snapshot_data['ts'] / 1000)
+        return jsonify(snapshot_data)
+
+    @website.route('/users/<user_id>/snapshots/<snapshot_id>/<result_name>')
+    def result(user_id, snapshot_id, result_name):
+        snapshot_ts = snapshot_id.split("_")[1]
+        snapshot_data = db.get_snapshot_by_user_and_ts(int(user_id), int(snapshot_ts))
+        if not snapshot_data:
+            return jsonify(missing_error)
+        if result_name == "pose":
+            return jsonify({'rotation': snapshot_data['rotation'], 'translation': snapshot_data['translation']})
+        if result_name == "feelings":
+            return jsonify(snapshot_data["feelings"])
+        if result_name == "color-image":
+            return jsonify(snapshot_data["color_image"])
+        if result_name == "depth-image":
+            return jsonify(snapshot_data["depth_image"])
+        else:
+            return jsonify(result_error)
+
+    @website.route('/users/<user_id>/snapshots/<snapshot_id>/<result_name>/data')
+    def result_data(user_id, snapshot_id, result_name):
+        snapshot_ts = snapshot_id.split("_")[1]
+        snapshot_data = db.get_snapshot_by_user_and_ts(int(user_id), int(snapshot_ts))
+        if not snapshot_data:
+            return jsonify(missing_error)
+        if result_name == "color-image":
+            return jsonify(snapshot_data["color_image"][2])
+        if result_name == "depth-image":
+            return jsonify(snapshot_data["depth_image"][2])
+        else:
+            return jsonify(result_error)
+
+
+missing_error = "Error: data is missing. Make sure your arguments are valid."
+result_error = "Error: Result type not supported."
 
 
 def run_server(host, port, db_url):
