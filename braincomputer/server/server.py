@@ -1,27 +1,32 @@
 import threading
 from braincomputer.mq import Mq
 from braincomputer.protocol import Hello, Config, Snapshot
-from .utils import Listener
+from braincomputer.utils import Listener
 
 queue_name = 'queue'
 
+lock = threading.Lock()
 
-def run_server(address, data):
+def handle_client(connection, data, mq):
+    handler = Handler(connection, data, mq)
+    handler.start()
+
+def run_server(address, publish):
+    data_dir = "braincomputer/gui/static/"#images/"
     print("starting server")
     tuple_address = address.split(":")
-    mq = Mq()
+    mq = Mq(publish)
 
-    mq.create_queue(queue_name,'5672')
+    mq.create_queue(queue_name)
     with Listener(int(tuple_address[1]), tuple_address[0]) as listener:
         while True:
             connection = listener.accept()
-            handler = Handler(connection, data, mq)
-            handler.start()
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("new connection")
+            threading.Thread(target=handle_client, args=(connection, data_dir, mq)).start()
 
 
 class Handler(threading.Thread):
-    lock = threading.Lock()
-
     def __init__(self, connection, data_dir, mq):
         super().__init__()
         self.connection = connection
@@ -40,7 +45,7 @@ class Handler(threading.Thread):
         # receive snapshot
         deserialized_snapshot = Snapshot.deserialize(self.connection.receive_message())
         # push to message queue
-        Handler.lock.acquire()
+        lock.acquire() #todo - instead of locking can use different mq channels
         print("sending to queue")
         try:
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
@@ -49,7 +54,7 @@ class Handler(threading.Thread):
             print("snapshot converted")
             self.mq.send_to_queue(queue_name, json_snapshot)
         finally:
-            Handler.lock.release()
+            lock.release()
 
 
 if __name__ == '__main__':
