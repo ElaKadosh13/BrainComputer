@@ -26,8 +26,8 @@ docker run -d -p 5672:5672 rabbitmq:3-management
 sleep 1m
 
 echo "running-parsers"
-docker run -d --network=host braincomputer-parsers:latest
-#docker run -d -e PARSER='pose' --network=host braincomputer-parsers:latest
+docker run -d -e PARSER='pose' --network=host braincomputer-parsers:latest
+#todo - run other parsers
 echo "running server"
 docker run -d --network=host braincomputer-server:latest
 
