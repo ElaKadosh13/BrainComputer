@@ -27,6 +27,7 @@ sleep 1m
 
 echo "running-parsers"
 docker run -d --network=host braincomputer-parsers:latest
+#docker run -d -e PARSER='pose' --network=host braincomputer-parsers:latest
 echo "running server"
 docker run -d --network=host braincomputer-server:latest
 
