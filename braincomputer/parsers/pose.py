@@ -2,6 +2,7 @@ import json
 
 
 def parse_pose(snapshot):
+    print("in pose parser!!!!")
     data = json.loads(snapshot)
     return json.dumps({
         'user': data['user'],
