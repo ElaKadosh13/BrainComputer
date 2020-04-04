@@ -4,7 +4,7 @@ import traceback
 
 import click
 import braincomputer
-from braincomputer.parsers.parsers import run_parser
+from braincomputer.parsers.parsers import run_parser_mq, parse
 from braincomputer.utils.log import log
 
 
@@ -20,8 +20,15 @@ def main(quiet=False, traceback=False):
 @main.command("run-parser", short_help="run parser by type")
 @click.argument("parser_type", type=str)
 @click.argument("mq_url", type=str)
-def run_p(parser_type, mq_url):
-    log(run_parser(parser_type, mq_url))
+def run_pa(parser_type, mq_url):
+    log(run_parser_mq(parser_type, mq_url))
+
+
+@main.command("parse", short_help="run parser by type")
+@click.argument("parser_type", type=str)
+@click.argument("raw_data_path", type=str)
+def run_p(parser_type, raw_data_path):
+    log(parse(parser_type, raw_data_path))
 
 
 if __name__ == '__main__':

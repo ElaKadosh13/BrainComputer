@@ -16,6 +16,7 @@ def main(quiet=False, traceback=False):
     log.quiet = quiet
     log.traceback = traceback
 
+
 @main.command("get-users", short_help="http get users")
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default=8080)
@@ -24,6 +25,7 @@ def get_users(host, port):
     users = request.json()
     for user in users:
         print(f"user: {user['id']}, name: {user['name']}")
+
 
 @main.command("get-user", short_help="http get users by id")
 @click.option('-h', '--host', default='127.0.0.1')
@@ -37,6 +39,7 @@ def get_user(host, port, user_id):
     else:
         print(f"user: {user['id']}, name: {user['name']}, birthday: {user['birthday']}, gender: {user['gender']}")
 
+
 @main.command("get-snapshots", short_help="http get user snapshots")
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default=8080)
@@ -49,6 +52,7 @@ def get_snapshots(host, port, user_id):
     else:
         for snapshot in snapshots:
             print(f"snapshot id: {snapshot['id']}, snapshot timestamp: {snapshot['ts']}")
+
 
 @main.command("get-snapshot", short_help="http get user snapshot")
 @click.option('-h', '--host', default='127.0.0.1')
@@ -71,6 +75,7 @@ def get_snapshot(host, port, user_id, snapshot_id):
             print("color-image")
         if "depth_image" in snapshot:
             print("depth-image")
+
 
 @main.command("get-result", short_help="http get user snapshot result")
 @click.option('-h', '--host', default='127.0.0.1')
@@ -96,6 +101,7 @@ def get_result(host, port, user_id, snapshot_id, result_name, save):
             print(type(save))
             with open(save, 'w') as f:
                 f.write(str(snapshot))
+
 
 @main.command("get-result-data", short_help="http get user image result")
 @click.option('-h', '--host', default='127.0.0.1')

@@ -11,6 +11,7 @@ from braincomputer.mq import Mq
 from braincomputer.protocol import Snapshot
 
 
+
 class Parsers:
 
     def __init__(self):
@@ -41,7 +42,8 @@ class Parser:
     def __init__(self, parsing_function, parser_type, mq_url):
         self.parsing_function = parsing_function
         self.parser_type = parser_type
-        self.mq = Mq(mq_url)
+        if mq_url:
+            self.mq = Mq(mq_url)
 
     def callback(self, ch, method, properties, body):
         print("in callback, parsed data:")
@@ -57,9 +59,26 @@ class Parser:
         self.mq.consume_queue(queue_name, self.callback)
 
 
-def run_parser(parser_type, mq_url):
+def run_parser_mq(parser_type, mq_url):
     parsers = Parsers()
     print('parsing...')
     print(parser_type)
     parser = Parser(parsers.parsers_functions, parser_type, mq_url)
     parser.create_queue()
+
+
+def run_parser(parser_type, data):
+    parsers = Parsers()
+    p_func = parsers.parsers_functions[parser_type]
+    result = p_func(data)
+    print(result)
+    return result
+
+
+def parse(parser_type, raw_data_path):
+    parsers = Parsers()
+    p_func = parsers.parsers_functions[parser_type]
+    with open(raw_data_path, 'r') as f:
+        data = f.read()
+    result = p_func(data)
+    print(result) #todo - dont delete this print!!!!!

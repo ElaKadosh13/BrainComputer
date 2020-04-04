@@ -88,9 +88,9 @@ def webserver_routers(db):
                                      color_image_path=color_image_path)
 
 
-def run_server(host, port, db_url):
-    if db_url.startswith("mongodb"):
-        db = Db(db_url)
+def run_server(host, port, database_url):
+    if database_url.startswith("mongodb"):
+        db = Db(database_url)
         webserver_routers(db)
         website.run(host, port)
         # todo - db.client.close()

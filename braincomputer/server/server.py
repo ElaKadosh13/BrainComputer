@@ -7,14 +7,18 @@ queue_name = 'queue'
 
 lock = threading.Lock()
 
+
 def handle_client(connection, data, mq):
     handler = Handler(connection, data, mq)
     handler.start()
 
-def run_server(address, publish):
-    data_dir = "braincomputer/gui/static/"#images/"
+
+def run_server(host, port, publish):
+
+    data_dir = "braincomputer/gui/static/"
     print("starting server")
-    tuple_address = address.split(":")
+    address = host + ':' + str(port)
+    tuple_address = address.split(":")#todo - those 2 lines are dumb. fix.
     mq = Mq(publish)
 
     mq.create_queue(queue_name)
@@ -51,6 +55,8 @@ class Handler(threading.Thread):
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
                                                           deserialized_hello,
                                                           deserialized_snapshot.datetime[0])
+            f = open(f"data/{deserialized_snapshot.datetime}", "x")
+            f.write(json_snapshot)
             print("snapshot converted")
             self.mq.send_to_queue(queue_name, json_snapshot)
         finally:

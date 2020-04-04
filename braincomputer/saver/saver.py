@@ -5,25 +5,35 @@ from braincomputer.mq.mq import Mq
 
 
 class Saver:
-    def __init__(self, mq_url, db_url):
-        self.mq = Mq(mq_url)
-        print("cerated mq")
+    def __init__(self, db_url):
         self.db = Db(db_url)
         print("created db")
 
+    def save(self, parser_type, data):
+        self.db.save_to_db(data)
+
     def callback(self, ch, method, properties, body):
         print("in callback, saver data:")
-        self.db.save_to_db(body)
+        self.save("", body)
 
-    def handle_queue(self):
+    def handle_queue(self, mq_url):
+        mq = Mq(mq_url)
+        print("cerated mq")
         queue_name = 'parsed'
-        self.mq.create_queue(queue_name)
+        mq.create_queue(queue_name)
         print("created queue, consuming")
-        self.mq.consume_queue(queue_name, self.callback)
+        mq.consume_queue(queue_name, self.callback)
 
 
 def run_saver(mq_url, db_url):
-    saver = Saver(mq_url, db_url)
+    saver = Saver(db_url)
     print('saving...')
-    saver.handle_queue()
+    saver.handle_queue(mq_url)
 
+
+def save(db_url, parser_type, path):
+    print("in save")
+    db = Db(db_url)
+    with open(path, 'r') as f:
+        data = f.read()
+    db.save_to_db(data)

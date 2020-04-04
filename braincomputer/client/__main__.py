@@ -1,7 +1,7 @@
 import sys
 import click
 import braincomputer
-from braincomputer.client.client import upload_snapshots
+from braincomputer.client.client import upload_sample
 from braincomputer.utils.log import log
 
 
@@ -19,8 +19,7 @@ def main(quiet=False, traceback=False):
 @click.option('-p', '--port', default=8000)
 @click.argument("path", type=str)
 def run_c(host, port, path):
-    address = host + ':' + str(port)
-    log(upload_snapshots(address, path))
+    log(upload_sample(host, port, path))
 
 
 if __name__ == '__main__':

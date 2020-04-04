@@ -87,11 +87,13 @@ missing_error = "Error: data is missing. Make sure your arguments are valid."
 result_error = "Error: Result type not supported."
 
 
-def run_server(host, port, db_url):
-    if db_url.startswith("mongodb"):
-        db = Db(db_url)
+def run_api_server(host, port, database_url):
+    if database_url.startswith("mongodb"):
+        db = Db(database_url)
         webserver_routers(db)
         website.run(host, port)
         # todo - db.client.close()
     else:
         raise Exception("unsupported db")
+
+

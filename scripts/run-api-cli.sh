@@ -1,1 +1,1 @@
-python -m braincomputer.api run-server mongodb://127.0.0.1:27017
+python -m braincomputer.api run-server

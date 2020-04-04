@@ -9,13 +9,13 @@ class Db:
         self.mdb = self.client["mdb"]
         self.users_table = self.mdb["users"]
         self.snapshots_table = self.mdb["snapshots"]
-        #pprint(self.db.command("serverStatus"))
         print("created db!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     def save_to_db(self, data):
         json_data = json.loads(data)
         print("in save to db")
         user = json_data['user']
+        print(user)
         self.users_table.update_one({'id': user['id']}, {'$set': {**user}}, upsert=True)
         for x in self.users_table.find():
             print(x)

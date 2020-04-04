@@ -1,7 +1,7 @@
 import sys
 import click
 import braincomputer
-from braincomputer.api.web import run_server
+from braincomputer.api.api import run_api_server
 from braincomputer.utils.log import log
 
 
@@ -13,12 +13,13 @@ def main(quiet=False, traceback=False):
     log.quiet = quiet
     log.traceback = traceback
 
+
 @main.command("run-server", short_help="run webserver forever")
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default=8080)
-@click.argument("db_url", type=str)
-def run_ws(host, port, db_url):
-    log(run_server(host, port, db_url))
+@click.option('-d', '--database', default='mongodb://127.0.0.1:27017')
+def run_ws(host, port, database):
+    log(run_api_server(host, port, database))
 
 
 if __name__ == '__main__':

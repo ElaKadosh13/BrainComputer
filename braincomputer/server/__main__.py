@@ -19,8 +19,7 @@ def main(quiet=False, traceback=False):
 @click.option('-p', '--port', default=8000)
 @click.argument("publish", type=str)
 def run_s(host, port, publish):
-    address = host+':'+str(port)
-    log(run_server(address, publish))
+    log(run_server(host, port, publish))
 
 
 if __name__ == '__main__':
