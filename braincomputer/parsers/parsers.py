@@ -15,6 +15,7 @@ from braincomputer.protocol import Snapshot
 class Parsers:
 
     def __init__(self):
+        print("strting parserrrrr")
         self.parsers_functions = {}
         self.get_all_parsers()
 
@@ -26,7 +27,7 @@ class Parsers:
         path_to_import = pathlib.Path((dirname(abspath(__file__)))).absolute()
         sys.path.insert(0, str(path_to_import.parent))
         for p in path_to_import.iterdir():
-            if p.name != "parsers.py" and not p.name.startswith("__"):
+            if p.name != "parsers.py" and not p.name.startswith("__") and p.name != "Dockerfile":
                 import_module_name = f'braincomputer.{path_to_import.name}.{p.stem}'
                 importlib.import_module(f'{import_module_name}', package=__package__)
                 module = sys.modules[import_module_name]
