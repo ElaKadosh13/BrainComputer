@@ -1,0 +1,3 @@
+FROM braincomputer-base:latest
+
+CMD python -u -m braincomputer.saver run-saver 'rabbitmq://127.0.0.1:5672/' 'mongodb://127.0.0.1:27017'

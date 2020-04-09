@@ -1,0 +1,3 @@
+FROM braincomputer-base:latest
+
+CMD python -u -m braincomputer.gui run-server mongodb://127.0.0.1:27017
