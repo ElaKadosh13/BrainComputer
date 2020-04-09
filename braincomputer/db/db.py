@@ -31,10 +31,6 @@ class Db:
             print(x)
 
     def get_all_users(self):
-        # all_users_ids = self.users_table.find({}, {"_id": 0, "id": 1, "name": 1})
-        # print("get all users")
-        # print(list(all_users_ids))
-        # return list(all_users_ids)
         return self.users_table.find({}, {"_id": 0, "id": 1, "name": 1})
 
     def get_user_by_id(self, user_id):
@@ -44,12 +40,18 @@ class Db:
         return self.snapshots_table.find({"user": user_id}, {"_id": 0, "ts": 1})
 
     def get_snapshot_by_user_and_ts(self, user_id, timestamp):
-        print(timestamp)
         return self.snapshots_table.find_one({"user": user_id, "ts": timestamp})
 
-        # @classmethod
-        # def connect_to_db(cls, db_url):
-        #     return Db(db_url)
+    def get_feelings_by_user(self, user_id):
+        return self.snapshots_table.find({"user": user_id}, {"_id": 0, "feelings": 1})
 
+    def get_poses_by_user(self, user_id):
+        return self.snapshots_table.find({"user": user_id}, {"_id": 0, "rotation": 1, "translation": 1})
+
+    def get_color_images_by_user(self, user_id):
+        return self.snapshots_table.find({"user": user_id}, {"_id": 0, "color_image": 1})
+
+    def get_depth_images_by_user(self, user_id):
+        return self.snapshots_table.find({"user": user_id}, {"_id": 0, "depth_image": 1})
 
 

@@ -4,26 +4,13 @@ import pika
 class Mq:
     def __init__(self, address):
         self.channel = None
-        self.host, self.port = self.check_address(address)
-        print(self.host)
-        print(self.port)
-
-    def check_address(self, address):
-        split_addr = address.replace("/", "").split(":")
-        if len(split_addr) != 3:
-            raise Exception("invalid rabbitmq url")
-        if split_addr[0] != 'rabbitmq':
-            raise Exception("invalid rabbitmq url")
-        return split_addr[1:]
-
+        self.host, self.port = check_rabbit_address(address)
 
     def create_queue(self, name, type):
-        print("creting queue")
         connection_parameters = pika.ConnectionParameters(self.host, self.port)
         print(connection_parameters)
         print(pika.BlockingConnection(connection_parameters))
         connection = pika.BlockingConnection(connection_parameters)
-        print("connected mq")
         self.channel = connection.channel()
         self.channel.exchange_declare(exchange=name, exchange_type=type)
 
@@ -44,3 +31,12 @@ class Mq:
 
     def send_to_basic_queue(self, body):
         self.send_to_queue('queue', body)
+
+
+def check_rabbit_address(address):
+    split_addr = address.replace("/", "").split(":")
+    if len(split_addr) != 3:
+        raise Exception("invalid rabbitmq url")
+    if split_addr[0] != 'rabbitmq':
+        raise Exception("invalid rabbitmq url")
+    return split_addr[1:]

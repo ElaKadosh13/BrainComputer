@@ -6,7 +6,8 @@ from flask import Flask
 
 from braincomputer.db import Db
 from braincomputer.gui.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML, \
-    _IMAGE_HTML
+    _IMAGE_HTML, _FEELINGS_LINE_HTML, _FEELINGS_OVERTIME_HTML, _POSE_LINE_HTML, _POSE_OVERTIME_HTML, _IMAGE_LINE_HTML, \
+    _IMAGE_OVERTIME_HTML
 
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
@@ -29,7 +30,6 @@ def webserver_routers(db):
         # create the index html
         return index_html_page
 
-    ##todo - replace thought by snapshot
     @website.route('/users/<user_id>')
     def user(user_id):
         print("user_page!!!!!!")
@@ -50,6 +50,63 @@ def webserver_routers(db):
             format(user_id=user_id, user_name=user_data['name'], user_gender=user_gender,
                    user_birthday=user_birthday, thoughts=thought_list)
         return users_html_page
+
+    @website.route('/users/<user_id>/feelings_overtime')
+    def feelings_overtime(user_id):
+        user_data = db.get_user_by_id(int(user_id))
+        feelings = db.get_feelings_by_user(int(user_id))
+        feelings_lines_html = []
+        for thought in list(feelings):
+            if 'feelings' in thought:
+                feelings_data = thought['feelings']
+                feelings_lines_html.append(_FEELINGS_LINE_HTML.format(feelings_data=feelings_data))
+        feelings_list = '\n'.join(feelings_lines_html)
+        feelings_html_page = _FEELINGS_OVERTIME_HTML. \
+            format(user_id=user_id, user_name=user_data['name'], feelings_data_overtime=feelings_list)
+        return feelings_html_page
+
+    @website.route('/users/<user_id>/pose_overtime')
+    def pose_overtime(user_id):
+        user_data = db.get_user_by_id(int(user_id))
+        pose = db.get_poses_by_user(int(user_id))
+        pose_lines_html = []
+        for thought in list(pose):
+            if 'rotation' in thought and 'translation' in thought:
+                rotation_data = thought['rotation']
+                translation_data = thought['translation']
+                pose_lines_html.append(_POSE_LINE_HTML.format(rotation_data=rotation_data, translation_data=translation_data))
+        pose_list = '\n'.join(pose_lines_html)
+        pose_html_page = _POSE_OVERTIME_HTML. \
+            format(user_id=user_id, user_name=user_data['name'], pose_data_overtime=pose_list)
+        return pose_html_page
+
+    @website.route('/users/<user_id>/color_image_overtime')
+    def color_image_overtime(user_id):
+        user_data = db.get_user_by_id(int(user_id))
+        image_lines_html = []
+        image = db.get_color_images_by_user(int(user_id))
+        for thought in list(image):
+            if 'color_image' in thought:
+                width, height, path = thought['color_image']
+                image_lines_html.append(_IMAGE_LINE_HTML.format(path=path[17:], width=width/10, height=height/10))
+        image_list = '\n'.join(image_lines_html)
+        image_html_page = _IMAGE_OVERTIME_HTML. \
+            format(user_id=user_id, user_name=user_data['name'], image_data_overtime=image_list)
+        return image_html_page
+
+    @website.route('/users/<user_id>/depth_image_overtime')
+    def depth_image_overtime(user_id):
+        user_data = db.get_user_by_id(int(user_id))
+        image_lines_html = []
+        image = db.get_depth_images_by_user(int(user_id))
+        for thought in list(image):
+            if 'depth_image' in thought:
+                width, height, path = thought['depth_image']
+                image_lines_html.append(_IMAGE_LINE_HTML.format(path=path[17:], width=width, height=height))
+        image_list = '\n'.join(image_lines_html)
+        image_html_page = _IMAGE_OVERTIME_HTML. \
+            format(user_id=user_id, user_name=user_data['name'], image_data_overtime=image_list)
+        return image_html_page
 
     @website.route('/users/<user_id>/<timestamp>')
     def snapshot(user_id, timestamp):
