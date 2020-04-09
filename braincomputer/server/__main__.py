@@ -1,6 +1,7 @@
 import sys
 import click
 import braincomputer
+from braincomputer.mq import Mq
 from braincomputer.utils.log import log
 from braincomputer.server.server import run_server
 
@@ -19,7 +20,10 @@ def main(quiet=False, traceback=False):
 @click.option('-p', '--port', default=8000)
 @click.argument("publish", type=str)
 def run_s(host, port, publish):
-    log(run_server(host, port, publish))
+    mq = Mq(publish)
+    mq.create_queue('queue', 'fanout')
+    mq_publish = mq.send_to_basic_queue
+    log(run_server(host, port, mq_publish))
 
 
 if __name__ == '__main__':

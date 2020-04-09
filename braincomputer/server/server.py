@@ -1,15 +1,12 @@
 import threading
-from ..mq.mq import Mq
 from braincomputer.protocol import Hello, Config, Snapshot
 from braincomputer.utils import Listener
-
-queue_name = 'queue'
 
 lock = threading.Lock()
 
 
-def handle_client(connection, data, mq):
-    handler = Handler(connection, data, mq)
+def handle_client(connection, data, publish):
+    handler = Handler(connection, data, publish)
     handler.start()
 
 
@@ -19,23 +16,21 @@ def run_server(host, port, publish):
     print("starting server")
     address = host + ':' + str(port)
     tuple_address = address.split(":")#todo - those 2 lines are dumb. fix.
-    mq = Mq(publish)
 
-    mq.create_queue(queue_name, 'fanout')
     with Listener(int(tuple_address[1]), tuple_address[0]) as listener:
         while True:
             connection = listener.accept()
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("new connection")
-            threading.Thread(target=handle_client, args=(connection, data_dir, mq)).start()
+            threading.Thread(target=handle_client, args=(connection, data_dir, publish)).start()
 
 
 class Handler(threading.Thread):
-    def __init__(self, connection, data_dir, mq):
+    def __init__(self, connection, data_dir, publish):
         super().__init__()
         self.connection = connection
         self.data_root = data_dir
-        self.mq = mq
+        self.publish = publish
 
     def run(self):
         print("server running")
@@ -49,14 +44,14 @@ class Handler(threading.Thread):
         # receive snapshot
         deserialized_snapshot = Snapshot.deserialize(self.connection.receive_message())
         # push to message queue
-        lock.acquire() #todo - instead of locking can use different mq channels
+        lock.acquire()
         print("sending to queue")
         try:
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
                                                           deserialized_hello,
                                                           deserialized_snapshot.datetime[0])
             print("snapshot converted")
-            self.mq.send_to_queue(queue_name, json_snapshot)
+            self.publish(json_snapshot)
         finally:
             lock.release()
 

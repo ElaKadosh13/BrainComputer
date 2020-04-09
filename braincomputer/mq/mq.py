@@ -41,3 +41,6 @@ class Mq:
     def send_to_queue(self, name, body, key=''):
         print("sending to queue")
         self.channel.basic_publish(exchange=name, routing_key=key, body=body)
+
+    def send_to_basic_queue(self, body):
+        self.send_to_queue('queue', body)
