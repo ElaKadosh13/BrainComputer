@@ -16,7 +16,7 @@ def main(quiet=False, traceback=False):
 
 @main.command("run-server", short_help="run webserver forever")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.option('-d', '--database', default='mongodb://127.0.0.1:27017')
 def run_ws(host, port, database):
     log(run_api_server(host, port, database))

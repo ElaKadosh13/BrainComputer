@@ -48,3 +48,11 @@ _SNAPSHOT_HTML = '''
    </body>
 </html>
 '''
+
+_IMAGE_HTML = '''
+<html>
+    <body>
+        <p>image: </br> <img alt="image missing" src={image_path} width={image_width}, height={image_height}></p>
+   </body>
+</html>
+'''

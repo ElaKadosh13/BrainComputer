@@ -1,11 +1,10 @@
 from pymongo import MongoClient
-from pprint import pprint
 import json
 
 
 class Db:
     def __init__(self, db_url):
-        self.client = MongoClient(db_url)#'mongodb://127.0.0.1:27017')
+        self.client = MongoClient(db_url)
         self.mdb = self.client["mdb"]
         self.users_table = self.mdb["users"]
         self.snapshots_table = self.mdb["snapshots"]

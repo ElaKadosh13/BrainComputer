@@ -5,7 +5,8 @@ from datetime import datetime
 from flask import Flask
 
 from braincomputer.db import Db
-from braincomputer.gui.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML
+from braincomputer.gui.html import _USER_LINE_HTML, _INDEX_HTML, _THOUGHT_LINE_HTML, _SNAPSHOT_HTML, _USERS_HTML, \
+    _IMAGE_HTML
 
 root_path = pathlib.Path(__file__).absolute().parent.parent
 directory_path = ""
@@ -86,6 +87,24 @@ def webserver_routers(db):
                                      depth_image_height=depth_image_height, depth_image_path=depth_image_path,
                                      color_image_width=color_image_width, color_image_height=color_image_height,
                                      color_image_path=color_image_path)
+
+    @website.route('/users/<user_id>/<timestamp>/<image_type>')
+    def snapshot_image(user_id, timestamp, image_type):
+        snapshott = db.get_snapshot_by_user_and_ts(int(user_id), int(timestamp))
+        image_path = ""
+        image_height = 100
+        image_width = 100
+
+        if image_type == "color-image":
+            image_width, image_height, image_path = snapshott['color_image']
+
+        if image_type == "depth-image":
+            image_width, image_height, image_path = snapshott['depth_image']
+
+        image_path = image_path[17:]
+        return _IMAGE_HTML.format(image_width=image_width,
+                                  image_height=image_height,
+                                  image_path=image_path)
 
 
 def run_server(host, port, database_url):

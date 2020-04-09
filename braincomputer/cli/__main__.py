@@ -19,7 +19,7 @@ def main(quiet=False, traceback=False):
 
 @main.command("get-users", short_help="http get users")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 def get_users(host, port):
     request = requests.get(f"http://{host}:{port}/users")
     users = request.json()
@@ -29,7 +29,7 @@ def get_users(host, port):
 
 @main.command("get-user", short_help="http get users by id")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.argument("user_id", type=int)
 def get_user(host, port, user_id):
     request = requests.get(f"http://{host}:{port}/users/{user_id}")
@@ -42,7 +42,7 @@ def get_user(host, port, user_id):
 
 @main.command("get-snapshots", short_help="http get user snapshots")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.argument("user_id", type=int)
 def get_snapshots(host, port, user_id):
     request = requests.get(f"http://{host}:{port}/users/{user_id}/snapshots")
@@ -56,7 +56,7 @@ def get_snapshots(host, port, user_id):
 
 @main.command("get-snapshot", short_help="http get user snapshot")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.argument("user_id", type=int)
 @click.argument("snapshot_id", type=str)
 def get_snapshot(host, port, user_id, snapshot_id):
@@ -79,7 +79,7 @@ def get_snapshot(host, port, user_id, snapshot_id):
 
 @main.command("get-result", short_help="http get user snapshot result")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.option('-s', '--save', default="")
 @click.argument("user_id", type=int)
 @click.argument("snapshot_id", type=str)
@@ -105,7 +105,7 @@ def get_result(host, port, user_id, snapshot_id, result_name, save):
 
 @main.command("get-result-data", short_help="http get user image result")
 @click.option('-h', '--host', default='127.0.0.1')
-@click.option('-p', '--port', default=8080)
+@click.option('-p', '--port', default=8081)
 @click.argument("user_id", type=int)
 @click.argument("snapshot_id", type=str)
 @click.argument("result_name", type=str)
@@ -115,8 +115,8 @@ def get_result_data(host, port, user_id, snapshot_id, result_name):
     if str(image_path).startswith("Error:"):
         print(str(image_path))
     else:
-        print("Showing image in browser. Notice- if its the first time you may need to enter user password")
-        webbrowser.open(image_path)
+        ts = snapshot_id.split("_")[1]
+        print(f"To see image in browser use this link - \n http://127.0.0.1:8080/users/{user_id}/{ts}/{result_name} \n(if you changed the default gui port replace 8080 with the port you chose)")
 
 
 if __name__ == '__main__':
