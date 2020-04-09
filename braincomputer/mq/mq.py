@@ -17,7 +17,7 @@ class Mq:
         return split_addr[1:]
 
 
-    def create_queue(self, name):
+    def create_queue(self, name, type):
         print("creting queue")
         connection_parameters = pika.ConnectionParameters(self.host, self.port)
         print(connection_parameters)
@@ -25,15 +25,19 @@ class Mq:
         connection = pika.BlockingConnection(connection_parameters)
         print("connected mq")
         self.channel = connection.channel()
-        self.channel.exchange_declare(exchange=name, exchange_type='fanout')
+        self.channel.exchange_declare(exchange=name, exchange_type=type)
 
-    def consume_queue(self, name, callback):
+    def consume_queue(self, name, callback, key=''):
         q = self.channel.queue_declare(queue='', exclusive=True)
         q_name = q.method.queue
-        self.channel.queue_bind(exchange=name, queue=q_name)
+        if key == '':
+            self.channel.queue_bind(exchange=name, queue=q_name, routing_key=key)
+        else:
+            for k in key:
+                self.channel.queue_bind(exchange=name, queue=q_name, routing_key=k)
         self.channel.basic_consume(queue=q_name, on_message_callback=callback, auto_ack=True)
         self.channel.start_consuming()
 
-    def send_to_queue(self, name, body):
+    def send_to_queue(self, name, body, key=''):
         print("sending to queue")
-        self.channel.basic_publish(exchange=name, routing_key='', body=body)
+        self.channel.basic_publish(exchange=name, routing_key=key, body=body)

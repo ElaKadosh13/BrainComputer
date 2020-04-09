@@ -14,15 +14,16 @@ class Saver:
 
     def callback(self, ch, method, properties, body):
         print("in callback, saver data:")
-        self.save("", body)
+        self.save(method.routing_key, body)
 
     def handle_queue(self, mq_url):
         mq = Mq(mq_url)
         print("cerated mq")
         queue_name = 'parsed'
-        mq.create_queue(queue_name)
+        mq.create_queue(queue_name, 'topic')
         print("created queue, consuming")
-        mq.consume_queue(queue_name, self.callback)
+        parser_keys = ['pose', 'feelings', 'color_image', 'depth_image']
+        mq.consume_queue(queue_name, self.callback, parser_keys)
 
 
 def run_saver(mq_url, db_url):

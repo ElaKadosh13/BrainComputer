@@ -21,7 +21,7 @@ def run_server(host, port, publish):
     tuple_address = address.split(":")#todo - those 2 lines are dumb. fix.
     mq = Mq(publish)
 
-    mq.create_queue(queue_name)
+    mq.create_queue(queue_name, 'fanout')
     with Listener(int(tuple_address[1]), tuple_address[0]) as listener:
         while True:
             connection = listener.accept()
