@@ -11,7 +11,6 @@ def handle_client(connection, data, publish):
 
 
 def run_server(host, port, publish):
-
     data_dir = "braincomputer/gui/static/"
     print("starting server")
     address = host + ':' + str(port)

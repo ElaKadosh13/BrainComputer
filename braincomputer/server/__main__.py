@@ -20,10 +20,11 @@ def main(quiet=False, traceback=False):
 @click.option('-p', '--port', default=8000)
 @click.argument("publish", type=str)
 def run_s(host, port, publish):
-    mq = Mq(publish)
-    mq.create_queue('queue', 'fanout')
-    mq_publish = mq.send_to_basic_queue
-    log(run_server(host, port, mq_publish))
+    with Mq(publish) as mq:
+        mq.create_queue('queue', 'fanout')
+        mq_publish = mq.send_to_queue
+        log(run_server(host, port, mq_publish))
+
 
 
 if __name__ == '__main__':

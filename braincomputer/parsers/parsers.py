@@ -52,14 +52,14 @@ class Parser:
         print(parsed)
         print("@@@@@@@@@@@@@@ parser type")
         print(self.parser_type)
-        self.mq.send_to_queue('parsed', parsed, self.parser_type)
+        self.mq.send_to_queue(parsed, 'parsed', self.parser_type)
 
     def create_queue(self):
         queue_name = 'queue'
         self.mq.create_queue(queue_name, 'fanout')
         parsed_queue_name = 'parsed'
         self.mq.create_queue(parsed_queue_name, 'topic')
-        self.mq.consume_queue(queue_name, self.callback)
+        self.mq.consume_from_queue(queue_name, self.callback)
 
 
 def run_parser_mq(parser_type, mq_url):

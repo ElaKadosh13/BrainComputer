@@ -1,42 +1,42 @@
 import pika
 
+from braincomputer.mq.rabbitmq import Rabbitmq
+
 
 class Mq:
+    """If you want to change the queue just change lines 13-15 to the new queue initialization.
+    Make sure the queue implements the methods:
+    1. create_queue - set up parameters, connect, anything that needs to be done before we can send/recieve from the queue
+    2. consume_from_queue
+    3. send_to_queue
+    4. close queue
+    Also - all functions use *args so it's easy to replace to a queue that has different arguments for those methods
+    """
     def __init__(self, address):
-        self.channel = None
-        self.host, self.port = check_rabbit_address(address)
-
-    def create_queue(self, name, type):
-        connection_parameters = pika.ConnectionParameters(self.host, self.port)
-        print(connection_parameters)
-        print(pika.BlockingConnection(connection_parameters))
-        connection = pika.BlockingConnection(connection_parameters)
-        self.channel = connection.channel()
-        self.channel.exchange_declare(exchange=name, exchange_type=type)
-
-    def consume_queue(self, name, callback, key=''):
-        q = self.channel.queue_declare(queue='', exclusive=True)
-        q_name = q.method.queue
-        if key == '':
-            self.channel.queue_bind(exchange=name, queue=q_name, routing_key=key)
+        self.queue = None
+        split_addr = address.replace("/", "").split(":")
+        if len(split_addr) != 3:
+            raise Exception("invalid url, need to be mq://host:port")
+        if split_addr[0] == 'rabbitmq':
+            host, port = split_addr[1:]
+            self.queue = Rabbitmq(host, port)
         else:
-            for k in key:
-                self.channel.queue_bind(exchange=name, queue=q_name, routing_key=k)
-        self.channel.basic_consume(queue=q_name, on_message_callback=callback, auto_ack=True)
-        self.channel.start_consuming()
+            raise Exception("currently only rabbitmq is supported")
 
-    def send_to_queue(self, name, body, key=''):
-        print("sending to queue")
-        self.channel.basic_publish(exchange=name, routing_key=key, body=body)
+    def __enter__(self):
+        return self
 
-    def send_to_basic_queue(self, body):
-        self.send_to_queue('queue', body)
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close_queue()
 
+    def create_queue(self, *args):
+        self.queue.create_queue(*args)
 
-def check_rabbit_address(address):
-    split_addr = address.replace("/", "").split(":")
-    if len(split_addr) != 3:
-        raise Exception("invalid rabbitmq url")
-    if split_addr[0] != 'rabbitmq':
-        raise Exception("invalid rabbitmq url")
-    return split_addr[1:]
+    def consume_from_queue(self, *args):
+        self.queue.consume_from_queue(*args)
+
+    def send_to_queue(self, *args):
+        self.queue.send_to_queue(*args)
+
+    def close_queue(self):
+        self.queue.close_queue()

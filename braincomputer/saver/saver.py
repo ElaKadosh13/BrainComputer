@@ -23,7 +23,7 @@ class Saver:
         mq.create_queue(queue_name, 'topic')
         print("created queue, consuming")
         parser_keys = ['pose', 'feelings', 'color_image', 'depth_image']
-        mq.consume_queue(queue_name, self.callback, parser_keys)
+        mq.consume_from_queue(queue_name, self.callback, parser_keys)
 
 
 def run_saver(mq_url, db_url):
