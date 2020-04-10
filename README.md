@@ -73,9 +73,10 @@ or `--traceback` flag to show the full traceback when an exception is raised
 non-zero code).
 
 ## Gui
+
 Navigate to http://127.0.0.1:8080.
 
-##Adding a parser
-Just add it to the parsers directory, parser x should have a single parsing function 'parse_x'
+## Parser
+Adding a parser - just add a file to the parsers directory, parser x should have a single parsing function 'parse_x'
 and a field - parse_x.field = 'x' 
 also - add the parser name x to the config fields in the server, and to the listening queues topics (key) in the saver
