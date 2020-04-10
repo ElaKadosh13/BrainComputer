@@ -45,7 +45,7 @@ _SNAPSHOT_HTML = '''
     <body>
         <p>user {user_id} timestamp: {timestamp}</p>
         <p>pose:</br>translation: {translation}</br>rotation: {rotation}</p>
-        <p>feelings:{feelings}</p>
+        <p>feelings: [Hunger, Thirst, Exhaustion, Happiness] </br> {feelings}</p>
         <p>color_image: </br> <img alt="color image missing" src={color_image_path} width={color_image_width}, height={color_image_height}></p>
         <p>depth_image: </br> <img alt="depth image missing" src={depth_image_path} width={depth_image_width}, height={depth_image_height}></p>
    </body>
@@ -65,7 +65,8 @@ _FEELINGS_OVERTIME_HTML = '''
     </head>
     <body>
         <p>Id: {user_id}, Name: {user_name}</p>              
-         <p>check out all the feelings data:</p>
+        <p>check out all the feelings data:</p>
+        <p>[Hunger, Thirst, Exhaustion, Happiness]</p>
         <ul>
             {feelings_data_overtime}
         </ul>
@@ -108,6 +109,6 @@ _IMAGE_OVERTIME_HTML = '''
 '''
 _IMAGE_LINE_HTML = '''
 <li>       
-    <p>image: </br> <img alt="image missing" src={path} width={width}, height={height}></p>
+    <p></br> <img alt="image missing" src={path} width={width}, height={height}></p>
 </li>
 '''

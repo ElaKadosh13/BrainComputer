@@ -50,7 +50,7 @@ def get_snapshots(host, port, user_id):
         print(str(snapshots))
     else:
         for snapshot in snapshots:
-            print(f"snapshot id: {snapshot['id']}, snapshot timestamp: {snapshot['ts']}")
+            print(f"id: {snapshot['id']}, timestamp: {snapshot['ts']}")
 
 
 @main.command("get-snapshot", short_help="http get user snapshot")
@@ -89,11 +89,17 @@ def get_result(host, port, user_id, snapshot_id, result_name, save):
     if str(snapshot).startswith("Error:"):
         print(str(snapshot))
     else:
-        print(snapshot)
+        if result_name == "feelings":
+            hunger, thirst, exhastion, happiness = snapshot
+            print(f"Hunger: {hunger}\nThirst: {thirst}\nExhaustion: {exhastion}\nHappiness: {happiness}")
+        if result_name == "pose":
+            print(f"Rotation: {snapshot['rotation']}\nTranslation: {snapshot['translation']}")
         if result_name.endswith("image"):
-            print("\nIf you want to see the image you can navigate to the path above, "
+            width, height, path = snapshot
+            print(f"Width:{width}\nHeight:{height}\nPath:{path}")
+            print("If you want to see the image you can navigate to the path above, "
                   "OR use the GET request:\n "
-                  "pythom -m braincomputer.cli get-result-data <user id> <snapshot id> <result type>\n"
+                  "python -m braincomputer.cli get-result-data <user id> <snapshot id> <result type>\n"
                   "[result type can be: color-image/depth-image]\n")
         if save:
             print(f"saving data to path {save}")

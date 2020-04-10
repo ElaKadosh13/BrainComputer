@@ -126,7 +126,8 @@ def webserver_routers(db):
             if data == "depth_image":
                 depth_image_width, depth_image_height, depth_image_path = snapshot['depth_image']
                 depth_image_path = depth_image_path[17:]
-        return _SNAPSHOT_HTML.format(user_id=user_id, timestamp=timestamp, translation=translation,
+        ts = datetime.fromtimestamp(int(timestamp) / 1000)
+        return _SNAPSHOT_HTML.format(user_id=user_id, timestamp=ts, translation=translation,
                                      rotation=rotation, feelings=feelings, depth_image_width=depth_image_width,
                                      depth_image_height=depth_image_height, depth_image_path=depth_image_path,
                                      color_image_width=color_image_width, color_image_height=color_image_height,
