@@ -6,6 +6,7 @@ from braincomputer.utils.reader import Reader
 
 
 def upload_sample(host, port, path):
+    """The client sends all the snapshots to the server. May take some time."""
     print("client running- may take some time")
     reader = Reader(path)
     for snapshot in reader:

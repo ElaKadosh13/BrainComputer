@@ -8,12 +8,14 @@ class Rabbitmq:
         self.port = port
 
     def create_queue(self, name, type):
+        """creates queue with a name and the type is fanout / topic"""
         connection_parameters = pika.ConnectionParameters(self.host, self.port)
         connection = pika.BlockingConnection(connection_parameters)
         self.channel = connection.channel()
         self.channel.exchange_declare(exchange=name, exchange_type=type)
 
     def consume_from_queue(self, name, callback, key=''):
+        """consume can be fanout if key is empty, or for the parsers topic queue -by routing key"""
         q = self.channel.queue_declare(queue='', exclusive=True)
         q_name = q.method.queue
         if key == '':
@@ -25,6 +27,7 @@ class Rabbitmq:
         self.channel.start_consuming()
 
     def send_to_queue(self, body, name='queue', key=''):
+        "publish to queue by name and key. default name -'queue' is for the server that gets the publish function"
         self.channel.basic_publish(exchange=name, routing_key=key, body=body)
 
     def close_queue(self):

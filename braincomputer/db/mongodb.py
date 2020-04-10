@@ -3,6 +3,7 @@ import json
 
 
 class Mongodb:
+    """The DB has 2 tables- for users and for snapshots."""
     def __init__(self, db_url):
         self.client = MongoClient(db_url)
         self.mdb = self.client["mdb"]
@@ -10,6 +11,7 @@ class Mongodb:
         self.snapshots_table = self.mdb["snapshots"]
 
     def save_to_db(self, data):
+        """update users table if it's a new user, and insert a snapshot to snapshots table"""
         json_data = json.loads(data)
         user = json_data['user']
         self.users_table.update_one({'id': user['id']}, {'$set': {**user}}, upsert=True)
@@ -20,6 +22,8 @@ class Mongodb:
 
     def close_db(self):
         self.client.close()
+
+    """db queries"""
 
     def get_all_users(self):
         return self.users_table.find({}, {"_id": 0, "id": 1, "name": 1})

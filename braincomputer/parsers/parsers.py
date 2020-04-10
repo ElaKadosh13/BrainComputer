@@ -20,6 +20,7 @@ class Parsers:
             self.parsers_functions[parser](snapshot)
 
     def get_all_parsers(self):
+        """collects all the parser functions from this directory"""
         path_to_import = pathlib.Path((dirname(abspath(__file__)))).absolute()
         sys.path.insert(0, str(path_to_import.parent))
         for p in path_to_import.iterdir():
@@ -50,10 +51,12 @@ class Parser:
             self.mq.close_queue()
 
     def callback(self, ch, method, properties, body):
+        """parse by the parsing function and publish to the correct queue by topic"""
         parsed = self.parsing_function[self.parser_type](body)
         self.mq.send_to_queue(parsed, 'parsed', self.parser_type)
 
     def create_queue(self):
+        """creates consume (from server) and produce (to db) queues"""
         queue_name = 'queue'
         self.mq.create_queue(queue_name, 'fanout')
         parsed_queue_name = 'parsed'
@@ -80,4 +83,4 @@ def parse(parser_type, raw_data_path):
     with open(raw_data_path, 'r') as f:
         data = f.read()
     result = p_func(data)
-    print(result) #todo - dont delete this print!!!!!
+    print(result)

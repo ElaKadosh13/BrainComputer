@@ -6,7 +6,6 @@ import braincomputer
 import requests
 from braincomputer.utils.log import log
 
-#todo - be careful with deleting prints here!!!!!
 
 @click.group()
 @click.version_option(braincomputer.version)

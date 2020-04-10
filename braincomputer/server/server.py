@@ -11,6 +11,7 @@ def handle_client(connection, data, publish):
 
 
 def run_server(host, port, publish):
+    """runs server forever"""
     data_dir = "braincomputer/gui/static/"
     with Listener(int(port), host) as listener:
         while True:
@@ -49,5 +50,4 @@ class Handler(threading.Thread):
 
 if __name__ == '__main__':
     import sys
-
     sys.exit()

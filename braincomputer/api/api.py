@@ -12,11 +12,13 @@ website = Flask(__name__, static_folder="../static/")
 def webserver_routers(db):
     @website.route('/users')
     def users():
+        """users page, displays all users name+id"""
         users = list(db.get_all_users())
         return jsonify(users)
 
     @website.route('/users/<user_id>')
     def user(user_id):
+        """displays user information"""
         user_data = db.get_user_by_id(int(user_id))
         if not user_data:
             return jsonify(missing_error)
@@ -27,6 +29,7 @@ def webserver_routers(db):
 
     @website.route('/users/<user_id>/snapshots')
     def snapshots(user_id):
+        """displays links to user's snapshots by timestamp / overtime"""
         snapshots_list = list(db.get_snapshots_ts_by_user(int(user_id)))
         if not snapshots_list:
             return jsonify(missing_error)
@@ -37,6 +40,7 @@ def webserver_routers(db):
 
     @website.route('/users/<user_id>/snapshots/<snapshot_id>')
     def snapshot(user_id, snapshot_id):
+        """displays snapshot information"""
         try:
             snapshot_ts = snapshot_id.split("_")[1]
         except:
@@ -50,6 +54,7 @@ def webserver_routers(db):
 
     @website.route('/users/<user_id>/snapshots/<snapshot_id>/<result_name>')
     def result(user_id, snapshot_id, result_name):
+        """displays parsed data by type"""
         snapshot_ts = snapshot_id.split("_")[1]
         snapshot_data = db.get_snapshot_by_user_and_ts(int(user_id), int(snapshot_ts))
         if not snapshot_data:
@@ -67,6 +72,7 @@ def webserver_routers(db):
 
     @website.route('/users/<user_id>/snapshots/<snapshot_id>/<result_name>/data')
     def result_data(user_id, snapshot_id, result_name):
+        """displays images"""
         snapshot_ts = snapshot_id.split("_")[1]
         snapshot_data = db.get_snapshot_by_user_and_ts(int(user_id), int(snapshot_ts))
         if not snapshot_data:

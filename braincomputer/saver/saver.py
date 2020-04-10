@@ -16,9 +16,11 @@ class Saver:
         self.db.save_to_db(data)
 
     def callback(self, ch, method, properties, body):
+        """save the consumed data in the db"""
         self.save(method.routing_key, body)
 
     def handle_queue(self, mq_url):
+        """create queues consuming from parsers [bind one for each parser key]"""
         with Mq(mq_url) as mq:
             queue_name = 'parsed'
             mq.create_queue(queue_name, 'topic')
