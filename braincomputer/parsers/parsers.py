@@ -3,19 +3,15 @@ import sys
 import importlib
 import inspect
 from os.path import dirname, abspath
-import pika
-import json
 
-# NOTICE - counting on each parser class to have 1 parsing function exactly
 from braincomputer.mq import Mq
-from braincomputer.protocol import Snapshot
 
+""" NOTICE - counting on each parser class to have 1 parsing function exactly """
 
 
 class Parsers:
 
     def __init__(self):
-        print("strting parserrrrr")
         self.parsers_functions = {}
         self.get_all_parsers()
 
@@ -36,22 +32,17 @@ class Parsers:
                                                  if inspect.isfunction(value)][0]
                 module_field = getattr(function_value, "field")
                 self.parsers_functions[module_field] = function_value
-        print(self.parsers_functions)
 
 
 class Parser:
     def __init__(self, parsing_function, parser_type, mq_url):
         self.parsing_function = parsing_function
         self.parser_type = parser_type
-        if mq_url:
+        if mq_url: #todo - make this connection close
             self.mq = Mq(mq_url)
 
     def callback(self, ch, method, properties, body):
-        print("in callback, parsed data:")
         parsed = self.parsing_function[self.parser_type](body)
-        print(parsed)
-        print("@@@@@@@@@@@@@@ parser type")
-        print(self.parser_type)
         self.mq.send_to_queue(parsed, 'parsed', self.parser_type)
 
     def create_queue(self):
@@ -64,8 +55,6 @@ class Parser:
 
 def run_parser_mq(parser_type, mq_url):
     parsers = Parsers()
-    print('parsing...')
-    print(parser_type)
     parser = Parser(parsers.parsers_functions, parser_type, mq_url)
     parser.create_queue()
 
@@ -74,7 +63,6 @@ def run_parser(parser_type, data):
     parsers = Parsers()
     p_func = parsers.parsers_functions[parser_type]
     result = p_func(data)
-    print(result)
     return result
 
 

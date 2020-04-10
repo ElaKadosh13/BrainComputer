@@ -60,10 +60,4 @@ class Reader:
 
 def start_reader(file_path):
     reader = Reader(file_path)
-    print(reader)
-    print()
-    # todo - delete
-    x = 0
-    for snapshot in reader:
-        print(snapshot)
-        print()
+

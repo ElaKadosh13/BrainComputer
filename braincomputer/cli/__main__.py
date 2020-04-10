@@ -98,7 +98,6 @@ def get_result(host, port, user_id, snapshot_id, result_name, save):
                   "[result type can be: color-image/depth-image]\n")
         if save:
             print(f"saving data to path {save}")
-            print(type(save))
             with open(save, 'w') as f:
                 f.write(str(snapshot))
 

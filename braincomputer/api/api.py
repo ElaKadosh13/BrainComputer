@@ -1,10 +1,6 @@
-import os
 import pathlib
 from datetime import datetime
-
-from PIL.Image import Image
 from flask import Flask
-
 from braincomputer.db import Db
 from flask import jsonify
 

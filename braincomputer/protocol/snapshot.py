@@ -25,8 +25,6 @@ class Snapshot:
 
     def to_json(self, root, user, dt):
         dattime = datetime.fromtimestamp(dt / 1000).strftime('%Y-%m-%d_%H-%M-%S-%f')
-        print("converting snapshot to json")
-
         self.color_image.path_to_data = root + str(user.user_id) + "_" + dattime + "_color_image_data"
         Snapshot.save_image_data(self.color_image.path_to_data, self.color_image.image_data)
         self.depth_image.path_to_data = root + str(user.user_id) + "_" + dattime + "_depth_image_data"
@@ -48,14 +46,10 @@ class Snapshot:
     @classmethod
     def save_image_data(cls, path, data):
         mode = 'w+b'
-        print("1")
         if os.path.exists(path):
-            print("2")
             mode = 'ab'
         format_path = pathlib.Path(path)
-        print(format_path)
         with format_path.open(mode) as f:
-            print(len(data))
             f.write(data)
 
     def serialize(self, config):

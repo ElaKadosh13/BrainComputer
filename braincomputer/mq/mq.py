@@ -1,5 +1,3 @@
-import pika
-
 from braincomputer.mq.rabbitmq import Rabbitmq
 
 

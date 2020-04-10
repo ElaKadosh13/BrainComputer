@@ -9,8 +9,6 @@ class Rabbitmq:
 
     def create_queue(self, name, type):
         connection_parameters = pika.ConnectionParameters(self.host, self.port)
-        print(connection_parameters)
-        print(pika.BlockingConnection(connection_parameters))
         connection = pika.BlockingConnection(connection_parameters)
         self.channel = connection.channel()
         self.channel.exchange_declare(exchange=name, exchange_type=type)

@@ -1,6 +1,3 @@
-from pymongo import MongoClient
-import json
-
 from braincomputer.db.mongodb import Mongodb
 
 

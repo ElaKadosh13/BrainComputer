@@ -30,5 +30,4 @@ class Listener:
 
     def accept(self):
         connection = self.socket.accept()[0]
-        print("accept new client")
         return Connection(connection)
