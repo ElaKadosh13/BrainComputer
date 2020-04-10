@@ -76,7 +76,9 @@ non-zero code).
 
 Navigate to http://127.0.0.1:8080.
 
-## Parser
-Adding a parser - just add a file to the parsers directory, parser x should have a single parsing function 'parse_x'
-and a field - parse_x.field = 'x' 
-also - add the parser name x to the config fields in the server, and to the listening queues topics (key) in the saver
+## Parsers
+Adding a parser - 
+1. Add a file to the parsers directory
+2. Parser x should have a single parsing function: 'parse_x'
+3. And a field - parse_x.field = 'x' 
+4. Also - add the parser name x to the config fields in the server, and to the listening queues topics (key) in the saver
