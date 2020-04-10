@@ -19,8 +19,17 @@ class Db:
         else:
             raise Exception("currently only mongodb is supported")
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return self.close_db()
+
     def save_to_db(self, *args):
         self.db.save_to_db(*args)
+
+    def close_db(self):
+        self.db.close_db()
 
     def get_all_users(self):
         return self.db.get_all_users()

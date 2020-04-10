@@ -30,6 +30,9 @@ class Mongodb:
         for x in self.snapshots_table.find():
             print(x)
 
+    def close_db(self):
+        self.client.close()
+
     def get_all_users(self):
         return self.users_table.find({}, {"_id": 0, "id": 1, "name": 1})
 

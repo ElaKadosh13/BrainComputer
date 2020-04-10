@@ -9,6 +9,12 @@ class Saver:
         self.db = Db(db_url)
         print("created db")
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.db.close_db()
+
     def save(self, parser_type, data):
         self.db.save_to_db(data)
 
@@ -27,14 +33,14 @@ class Saver:
 
 
 def run_saver(mq_url, db_url):
-    saver = Saver(db_url)
-    print('saving...')
-    saver.handle_queue(mq_url)
+    with Saver(db_url) as saver:
+        print('saving...')
+        saver.handle_queue(mq_url)
 
 
 def save(db_url, parser_type, path):
     print("in save")
-    db = Db(db_url)
-    with open(path, 'r') as f:
-        data = f.read()
-    db.save_to_db(data)
+    with Db(db_url) as db:
+        with open(path, 'r') as f:
+            data = f.read()
+        db.save_to_db(data)

@@ -166,9 +166,8 @@ def webserver_routers(db):
 
 def run_server(host, port, database_url):
     if database_url.startswith("mongodb"):
-        db = Db(database_url)
-        webserver_routers(db)
-        website.run(host, port)
-        # todo - db.client.close()
+        with Db(database_url) as db:
+            webserver_routers(db)
+            website.run(host, port)
     else:
         raise Exception("unsupported db")
