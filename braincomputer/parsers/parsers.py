@@ -38,8 +38,16 @@ class Parser:
     def __init__(self, parsing_function, parser_type, mq_url):
         self.parsing_function = parsing_function
         self.parser_type = parser_type
-        if mq_url: #todo - make this connection close
+        self.mq_url = mq_url
+        if mq_url:
             self.mq = Mq(mq_url)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.mq_url:
+            self.mq.close_queue()
 
     def callback(self, ch, method, properties, body):
         parsed = self.parsing_function[self.parser_type](body)
@@ -55,8 +63,8 @@ class Parser:
 
 def run_parser_mq(parser_type, mq_url):
     parsers = Parsers()
-    parser = Parser(parsers.parsers_functions, parser_type, mq_url)
-    parser.create_queue()
+    with Parser(parsers.parsers_functions, parser_type, mq_url) as parser:
+        parser.create_queue()
 
 
 def run_parser(parser_type, data):
