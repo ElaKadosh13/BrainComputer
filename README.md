@@ -75,6 +75,7 @@ non-zero code).
 ## Gui
 
 Navigate to http://127.0.0.1:8080.
+You can see there the users snapshots by timestamp, or the progress of parser data over time.
 
 ## Parsers
 Adding a parser - 
