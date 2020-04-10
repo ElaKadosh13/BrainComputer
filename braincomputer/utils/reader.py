@@ -59,5 +59,5 @@ class Reader:
 
 
 def start_reader(file_path):
-    reader = Reader(file_path)
+    Reader(file_path)
 
