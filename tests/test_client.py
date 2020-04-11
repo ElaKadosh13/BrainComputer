@@ -17,7 +17,7 @@ def mock_iterate_snapshot(y):
     while y < 1:
         y = 1
         yield Snapshot(111, (1, 2, 3), (1, 2, 3, 4),
-                 color_image=ColorImage(0,0,b''), depth_image=DepthImage(0,0,b''),
+                 color_image=ColorImage(0, 0, b''), depth_image=DepthImage(0, 0, b''),
                  user_feelings=(1, 2, 3, 4))
 
 

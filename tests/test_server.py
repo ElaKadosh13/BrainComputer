@@ -1,8 +1,7 @@
-from braincomputer.client import upload_sample
 from braincomputer.server import run_server
 import json
 import threading
-from braincomputer.utils.reader import Reader
+import time
 from braincomputer.utils.connection import Connection
 from braincomputer.utils.user import User
 from braincomputer.protocol import Hello, Config, Snapshot
@@ -14,14 +13,6 @@ config = Config(4, ["feelings", "pose", "color_image", "depth_image"])
 snapshot = Snapshot(1575446887339, (1, 2, 3), (1, 2, 3, 4),
                         color_image=ColorImage(0, 0, b''), depth_image=DepthImage(0, 0, b''),
                         user_feelings=(1, 2, 3, 4))
-
-
-def mock_client_send_hello(connection):
-    connection.send(hello.serialize())
-
-
-def mock_client_send_snapshot(connection):
-    connection.send(snapshot.serialize(config))
 
 
 def mock_hello_deserialize(hello_ser):
@@ -64,13 +55,11 @@ def test_run_server(monkeypatch, capsys):
     server = threading.Thread(target=run_server, args=(host, port, print_message))
     server.daemon = True
     server.start()
-    import time
-    time.sleep(0.1)
+    time.sleep(1)
     with Connection.connect(host, port) as connection:
-        mock_client_send_hello(connection)
-        time.sleep(0.1)
-        mock_client_send_snapshot(connection)
-        time.sleep(0.1)
+        connection.send(hello.serialize())
+        connection.send(snapshot.serialize(config))
+        time.sleep(1)
     c, err = capsys.readouterr()
     publish = """{"user": {"id": 1, "name": "ela", "birthday": 699746400, "gender": "f"}, "timestamp": [1575446887339], "translation": [1, 2, 3], "rotation": [1, 2, 3, 4], "color_image": {"width": 0, "height": 0, "path": ""}, "depth_image": {"width": 0, "height": 0, "path": ""}, "feelings": [1, 2, 3, 4]}\n"""
     assert c == publish
