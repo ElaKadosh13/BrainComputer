@@ -40,7 +40,7 @@ class Handler(threading.Thread):
         try:
             json_snapshot = deserialized_snapshot.to_json(self.data_root,
                                                           deserialized_hello,
-                                                          deserialized_snapshot.datetime[0])
+                                                          deserialized_snapshot.getdt())
             self.publish(json_snapshot)
         except:
             raise Exception("Server failed to publish the snapshot to mq")

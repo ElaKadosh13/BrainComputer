@@ -43,6 +43,9 @@ class Snapshot:
             'feelings': self.user_feelings
         })
 
+    def getdt(self):
+        return self.datetime[0]
+
     @classmethod
     def save_image_data(cls, path, data):
         mode = 'w+b'
