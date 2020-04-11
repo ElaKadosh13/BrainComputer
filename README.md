@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/ElaKadosh13/BrainComputer.svg?branch=master)](https://travis-ci.org/ElaKadosh13/BrainComputer)
 ![coverage](https://codecov.io/gh/ElaKadosh13/BrainComputer/branch/master/graph/badge.svg)
 
-An example package. See [full documentation](https://advanced-system-design-foobar.readthedocs.io/en/latest/).
 
 ## Installation
 
