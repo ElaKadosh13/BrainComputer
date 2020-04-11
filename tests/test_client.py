@@ -44,4 +44,3 @@ def test_upload_snapshot(monkeypatch, capsys):
     c = capsys.readouterr()
     assert "client running- may take some time" in c.out
     assert "client done" in c.out
-
