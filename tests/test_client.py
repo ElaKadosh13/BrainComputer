@@ -46,7 +46,7 @@ def test_upload_snapshot(monkeypatch, capsys):
     server = threading.Thread(target=mock_server, args=(host, port))
     server.start()
     time.sleep(1)
-    upload_sample(host, port, '../sample/snapshot.txt')
+    upload_sample(host, port, '')
     time.sleep(1)
     c = capsys.readouterr()
     assert "client running- may take some time" in c.out
