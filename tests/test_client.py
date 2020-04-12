@@ -24,9 +24,13 @@ def mock_iterate_snapshot(y):
 
 def mock_server(host, port):
     sock = socket.socket()
+    time.sleep(0.1)
     sock.bind((host, port))
+    time.sleep(0.1)
     sock.listen()
+    time.sleep(0.1)
     sock.accept()
+    time.sleep(0.1)
 
 
 def mock_connection_recv(self):
@@ -38,7 +42,7 @@ def test_upload_snapshot(monkeypatch, capsys):
     monkeypatch.setattr(Reader, "__init__", value=mock_reader_init)
     monkeypatch.setattr(Connection, "receive_message", value=mock_connection_recv)
     host = '127.0.0.1'
-    port = 8005
+    port = 8004
     server = threading.Thread(target=mock_server, args=(host, port))
     server.start()
     time.sleep(1)
