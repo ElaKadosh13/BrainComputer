@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>braincomputer.parsers.parsers &#8212; BrainComputer 1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for braincomputer.parsers.parsers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">abspath</span>
+
+<span class="kn">from</span> <span class="nn">braincomputer.mq</span> <span class="kn">import</span> <span class="n">Mq</span>
+
+<span class="sd">&quot;&quot;&quot; NOTICE - counting on each parser class to have 1 parsing function exactly &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Parsers"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parsers">[docs]</a><span class="k">class</span> <span class="nc">Parsers</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parsers_functions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_all_parsers</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Parsers.parse"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parsers.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">parser</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parsers_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parsers_functions</span><span class="p">[</span><span class="n">parser</span><span class="p">](</span><span class="n">snapshot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Parsers.get_all_parsers"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parsers.get_all_parsers">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_parsers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;collects all the parser functions from this directory&quot;&quot;&quot;</span>
+        <span class="n">path_to_import</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">((</span><span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))))</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path_to_import</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path_to_import</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;parsers.py&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;Dockerfile&quot;</span><span class="p">:</span>
+                <span class="n">import_module_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;braincomputer.</span><span class="si">{path_to_import.name}</span><span class="s1">.</span><span class="si">{p.stem}</span><span class="s1">&#39;</span>
+                <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{import_module_name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">__package__</span><span class="p">)</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">import_module_name</span><span class="p">]</span>
+                <span class="n">function_name</span><span class="p">,</span> <span class="n">function_value</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span>
+                                                 <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+                                                 <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">value</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">module_field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">function_value</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parsers_functions</span><span class="p">[</span><span class="n">module_field</span><span class="p">]</span> <span class="o">=</span> <span class="n">function_value</span></div></div>
+
+
+<div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parsing_function</span><span class="p">,</span> <span class="n">parser_type</span><span class="p">,</span> <span class="n">mq_url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parsing_function</span> <span class="o">=</span> <span class="n">parsing_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser_type</span> <span class="o">=</span> <span class="n">parser_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mq_url</span> <span class="o">=</span> <span class="n">mq_url</span>
+        <span class="k">if</span> <span class="n">mq_url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mq</span> <span class="o">=</span> <span class="n">Mq</span><span class="p">(</span><span class="n">mq_url</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mq_url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mq</span><span class="o">.</span><span class="n">close_queue</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Parser.callback"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parser.callback">[docs]</a>    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;parse by the parsing function and publish to the correct queue by topic&quot;&quot;&quot;</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parsing_function</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parser_type</span><span class="p">](</span><span class="n">body</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mq</span><span class="o">.</span><span class="n">send_to_queue</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="s1">&#39;parsed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Parser.create_queue"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.Parser.create_queue">[docs]</a>    <span class="k">def</span> <span class="nf">create_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;creates consume (from server) and produce (to db) queues&quot;&quot;&quot;</span>
+        <span class="n">queue_name</span> <span class="o">=</span> <span class="s1">&#39;queue&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mq</span><span class="o">.</span><span class="n">create_queue</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span> <span class="s1">&#39;fanout&#39;</span><span class="p">)</span>
+        <span class="n">parsed_queue_name</span> <span class="o">=</span> <span class="s1">&#39;parsed&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mq</span><span class="o">.</span><span class="n">create_queue</span><span class="p">(</span><span class="n">parsed_queue_name</span><span class="p">,</span> <span class="s1">&#39;topic&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mq</span><span class="o">.</span><span class="n">consume_from_queue</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="run_parser_mq"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.run_parser_mq">[docs]</a><span class="k">def</span> <span class="nf">run_parser_mq</span><span class="p">(</span><span class="n">parser_type</span><span class="p">,</span> <span class="n">mq_url</span><span class="p">):</span>
+    <span class="n">parsers</span> <span class="o">=</span> <span class="n">Parsers</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">Parser</span><span class="p">(</span><span class="n">parsers</span><span class="o">.</span><span class="n">parsers_functions</span><span class="p">,</span> <span class="n">parser_type</span><span class="p">,</span> <span class="n">mq_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">parser</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">create_queue</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="run_parser"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.run_parser">[docs]</a><span class="k">def</span> <span class="nf">run_parser</span><span class="p">(</span><span class="n">parser_type</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">parsers</span> <span class="o">=</span> <span class="n">Parsers</span><span class="p">()</span>
+    <span class="n">p_func</span> <span class="o">=</span> <span class="n">parsers</span><span class="o">.</span><span class="n">parsers_functions</span><span class="p">[</span><span class="n">parser_type</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">p_func</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../source/braincomputer.parsers.html#braincomputer.parsers.parsers.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">parser_type</span><span class="p">,</span> <span class="n">raw_data_path</span><span class="p">):</span>
+    <span class="n">parsers</span> <span class="o">=</span> <span class="n">Parsers</span><span class="p">()</span>
+    <span class="n">p_func</span> <span class="o">=</span> <span class="n">parsers</span><span class="o">.</span><span class="n">parsers_functions</span><span class="p">[</span><span class="n">parser_type</span><span class="p">]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">p_func</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">BrainComputer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, ElaKadosh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

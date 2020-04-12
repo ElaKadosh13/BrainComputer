@@ -2,7 +2,8 @@
 [![Build Status](https://travis-ci.org/ElaKadosh13/BrainComputer.svg?branch=master)](https://travis-ci.org/ElaKadosh13/BrainComputer)
 ![coverage](https://codecov.io/gh/ElaKadosh13/BrainComputer/branch/master/graph/badge.svg)
 
-See [full documentation](https://braincomputer.readthedocs.io/en/latest/#)
+See [full documentation](https://braincomputer.readthedocs.io/en/latest/#), under Index you will see all the modules, methods. Clicking on them will show the documentation I wrote.
+Under ModuleIndex you will find all the modules in my project, clicking on them will show methods and documentation.
 
 ## Installation
 

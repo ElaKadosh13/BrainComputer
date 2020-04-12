@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>braincomputer.gui.web &#8212; BrainComputer 1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for braincomputer.gui.web</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="kn">from</span> <span class="nn">braincomputer.db</span> <span class="kn">import</span> <span class="n">Db</span>
+<span class="kn">from</span> <span class="nn">braincomputer.gui.html</span> <span class="kn">import</span> <span class="n">_USER_LINE_HTML</span><span class="p">,</span> <span class="n">_INDEX_HTML</span><span class="p">,</span> <span class="n">_THOUGHT_LINE_HTML</span><span class="p">,</span> <span class="n">_SNAPSHOT_HTML</span><span class="p">,</span> <span class="n">_USERS_HTML</span><span class="p">,</span> \
+    <span class="n">_IMAGE_HTML</span><span class="p">,</span> <span class="n">_FEELINGS_LINE_HTML</span><span class="p">,</span> <span class="n">_FEELINGS_OVERTIME_HTML</span><span class="p">,</span> <span class="n">_POSE_LINE_HTML</span><span class="p">,</span> <span class="n">_POSE_OVERTIME_HTML</span><span class="p">,</span> <span class="n">_IMAGE_LINE_HTML</span><span class="p">,</span> \
+    <span class="n">_IMAGE_OVERTIME_HTML</span>
+
+<span class="n">root_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">directory_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">website</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="webserver_routers"><a class="viewcode-back" href="../../../source/braincomputer.gui.html#braincomputer.gui.web.webserver_routers">[docs]</a><span class="k">def</span> <span class="nf">webserver_routers</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+        <span class="n">users_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_all_users</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">users</span><span class="p">):</span>
+            <span class="n">users_lines_html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_USER_LINE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]))</span>
+        <span class="n">users_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">users_lines_html</span><span class="p">)</span>
+        <span class="n">index_html_page</span> <span class="o">=</span> <span class="n">_INDEX_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="n">users_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">index_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+        <span class="n">user_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">user_birthday</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;birthday&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">user_gender</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="s1">&#39;Male&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="s1">&#39;Female&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">:</span> <span class="s1">&#39;Other&#39;</span><span class="p">}[</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">]]</span>
+        <span class="n">thoughts</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_snapshots_ts_by_user</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">thoughts_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">thought</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">thoughts</span><span class="p">):</span>
+            <span class="n">thought_ts</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">thought</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+            <span class="n">thoughts_lines_html</span> \
+                <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_THOUGHT_LINE_HTML</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">thought_ts</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">thought</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]))</span>
+        <span class="n">thought_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">thoughts_lines_html</span><span class="p">)</span>
+        <span class="n">users_html_page</span> <span class="o">=</span> <span class="n">_USERS_HTML</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">user_gender</span><span class="o">=</span><span class="n">user_gender</span><span class="p">,</span>
+                   <span class="n">user_birthday</span><span class="o">=</span><span class="n">user_birthday</span><span class="p">,</span> <span class="n">thoughts</span><span class="o">=</span><span class="n">thought_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">users_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/feelings_overtime&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">feelings_overtime</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+        <span class="n">user_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">feelings</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_feelings_by_user</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">feelings_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">thought</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">feelings</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;feelings&#39;</span> <span class="ow">in</span> <span class="n">thought</span><span class="p">:</span>
+                <span class="n">feelings_data</span> <span class="o">=</span> <span class="n">thought</span><span class="p">[</span><span class="s1">&#39;feelings&#39;</span><span class="p">]</span>
+                <span class="n">feelings_lines_html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_FEELINGS_LINE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">feelings_data</span><span class="o">=</span><span class="n">feelings_data</span><span class="p">))</span>
+        <span class="n">feelings_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feelings_lines_html</span><span class="p">)</span>
+        <span class="n">feelings_html_page</span> <span class="o">=</span> <span class="n">_FEELINGS_OVERTIME_HTML</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">feelings_data_overtime</span><span class="o">=</span><span class="n">feelings_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">feelings_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/pose_overtime&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pose_overtime</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+        <span class="n">user_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">pose</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_poses_by_user</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">pose_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">thought</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">pose</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;rotation&#39;</span> <span class="ow">in</span> <span class="n">thought</span> <span class="ow">and</span> <span class="s1">&#39;translation&#39;</span> <span class="ow">in</span> <span class="n">thought</span><span class="p">:</span>
+                <span class="n">rotation_data</span> <span class="o">=</span> <span class="n">thought</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">]</span>
+                <span class="n">translation_data</span> <span class="o">=</span> <span class="n">thought</span><span class="p">[</span><span class="s1">&#39;translation&#39;</span><span class="p">]</span>
+                <span class="n">pose_lines_html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_POSE_LINE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rotation_data</span><span class="o">=</span><span class="n">rotation_data</span><span class="p">,</span> <span class="n">translation_data</span><span class="o">=</span><span class="n">translation_data</span><span class="p">))</span>
+        <span class="n">pose_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pose_lines_html</span><span class="p">)</span>
+        <span class="n">pose_html_page</span> <span class="o">=</span> <span class="n">_POSE_OVERTIME_HTML</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">pose_data_overtime</span><span class="o">=</span><span class="n">pose_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pose_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/color_image_overtime&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">color_image_overtime</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+        <span class="n">user_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">image_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_color_images_by_user</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">thought</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;color_image&#39;</span> <span class="ow">in</span> <span class="n">thought</span><span class="p">:</span>
+                <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">thought</span><span class="p">[</span><span class="s1">&#39;color_image&#39;</span><span class="p">]</span>
+                <span class="n">image_lines_html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_IMAGE_LINE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">[</span><span class="mi">17</span><span class="p">:],</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_lines_html</span><span class="p">)</span>
+        <span class="n">image_html_page</span> <span class="o">=</span> <span class="n">_IMAGE_OVERTIME_HTML</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">image_data_overtime</span><span class="o">=</span><span class="n">image_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/depth_image_overtime&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">depth_image_overtime</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+        <span class="n">user_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="n">image_lines_html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_depth_images_by_user</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">thought</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;depth_image&#39;</span> <span class="ow">in</span> <span class="n">thought</span><span class="p">:</span>
+                <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">thought</span><span class="p">[</span><span class="s1">&#39;depth_image&#39;</span><span class="p">]</span>
+                <span class="n">image_lines_html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_IMAGE_LINE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">[</span><span class="mi">17</span><span class="p">:],</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">))</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_lines_html</span><span class="p">)</span>
+        <span class="n">image_html_page</span> <span class="o">=</span> <span class="n">_IMAGE_OVERTIME_HTML</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">image_data_overtime</span><span class="o">=</span><span class="n">image_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image_html_page</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/&lt;timestamp&gt;&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">):</span>
+        <span class="n">snapshot</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_snapshot_by_user_and_ts</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="s2">&quot;missing&quot;</span>
+        <span class="n">translation</span> <span class="o">=</span> <span class="s2">&quot;missing&quot;</span>
+        <span class="n">feelings</span> <span class="o">=</span> <span class="s2">&quot;missing&quot;</span>
+        <span class="n">color_image_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">color_image_height</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">color_image_width</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">depth_image_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">depth_image_height</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">depth_image_width</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;rotation&quot;</span><span class="p">:</span>
+                <span class="n">rotation</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;translation&quot;</span><span class="p">:</span>
+                <span class="n">translation</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;translation&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;feelings&quot;</span><span class="p">:</span>
+                <span class="n">feelings</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;feelings&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;color_image&quot;</span><span class="p">:</span>
+                <span class="n">color_image_width</span><span class="p">,</span> <span class="n">color_image_height</span><span class="p">,</span> <span class="n">color_image_path</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;color_image&#39;</span><span class="p">]</span>
+                <span class="n">color_image_path</span> <span class="o">=</span> <span class="n">color_image_path</span><span class="p">[</span><span class="mi">17</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;depth_image&quot;</span><span class="p">:</span>
+                <span class="n">depth_image_width</span><span class="p">,</span> <span class="n">depth_image_height</span><span class="p">,</span> <span class="n">depth_image_path</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;depth_image&#39;</span><span class="p">]</span>
+                <span class="n">depth_image_path</span> <span class="o">=</span> <span class="n">depth_image_path</span><span class="p">[</span><span class="mi">17</span><span class="p">:]</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_SNAPSHOT_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span>
+                                     <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span> <span class="n">feelings</span><span class="o">=</span><span class="n">feelings</span><span class="p">,</span> <span class="n">depth_image_width</span><span class="o">=</span><span class="n">depth_image_width</span><span class="p">,</span>
+                                     <span class="n">depth_image_height</span><span class="o">=</span><span class="n">depth_image_height</span><span class="p">,</span> <span class="n">depth_image_path</span><span class="o">=</span><span class="n">depth_image_path</span><span class="p">,</span>
+                                     <span class="n">color_image_width</span><span class="o">=</span><span class="n">color_image_width</span><span class="p">,</span> <span class="n">color_image_height</span><span class="o">=</span><span class="n">color_image_height</span><span class="p">,</span>
+                                     <span class="n">color_image_path</span><span class="o">=</span><span class="n">color_image_path</span><span class="p">)</span>
+
+    <span class="nd">@website</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;user_id&gt;/&lt;timestamp&gt;/&lt;image_type&gt;&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">snapshot_image</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">image_type</span><span class="p">):</span>
+        <span class="n">snapshott</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_snapshot_by_user_and_ts</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+        <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">image_height</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">image_width</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="k">if</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;color-image&quot;</span><span class="p">:</span>
+            <span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">,</span> <span class="n">image_path</span> <span class="o">=</span> <span class="n">snapshott</span><span class="p">[</span><span class="s1">&#39;color_image&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;depth-image&quot;</span><span class="p">:</span>
+            <span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">,</span> <span class="n">image_path</span> <span class="o">=</span> <span class="n">snapshott</span><span class="p">[</span><span class="s1">&#39;depth_image&#39;</span><span class="p">]</span>
+
+        <span class="n">image_path</span> <span class="o">=</span> <span class="n">image_path</span><span class="p">[</span><span class="mi">17</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">_IMAGE_HTML</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_width</span><span class="o">=</span><span class="n">image_width</span><span class="p">,</span>
+                                  <span class="n">image_height</span><span class="o">=</span><span class="n">image_height</span><span class="p">,</span>
+                                  <span class="n">image_path</span><span class="o">=</span><span class="n">image_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_server"><a class="viewcode-back" href="../../../source/braincomputer.gui.html#braincomputer.gui.web.run_server">[docs]</a><span class="k">def</span> <span class="nf">run_server</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">database_url</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">database_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;mongodb&quot;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">Db</span><span class="p">(</span><span class="n">database_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
+            <span class="n">webserver_routers</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">website</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;unsupported db&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">BrainComputer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, ElaKadosh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

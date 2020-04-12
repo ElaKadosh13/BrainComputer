@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>braincomputer.db package &#8212; BrainComputer 1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="braincomputer-db-package">
+<h1>braincomputer.db package<a class="headerlink" href="#braincomputer-db-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-braincomputer.db.db">
+<span id="braincomputer-db-db-module"></span><h2>braincomputer.db.db module<a class="headerlink" href="#module-braincomputer.db.db" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="braincomputer.db.db.Db">
+<em class="property">class </em><code class="sig-prename descclassname">braincomputer.db.db.</code><code class="sig-name descname">Db</code><span class="sig-paren">(</span><em class="sig-param">db_url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>If you want to change the db just change lines 21-22 to the new db initialization.
+Make sure the db implements the methods: save_to_db, all the <a href="#id3"><span class="problematic" id="id4">get_</span></a> queries
+Also - all functions use <a href="#id1"><span class="problematic" id="id2">*</span></a>args so it’s easy to replace to a db that needs different arguments for those methods</p>
+<dl class="method">
+<dt id="braincomputer.db.db.Db.close_db">
+<code class="sig-name descname">close_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.close_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.close_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_all_users">
+<code class="sig-name descname">get_all_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_all_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_all_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_color_images_by_user">
+<code class="sig-name descname">get_color_images_by_user</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_color_images_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_color_images_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_depth_images_by_user">
+<code class="sig-name descname">get_depth_images_by_user</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_depth_images_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_depth_images_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_feelings_by_user">
+<code class="sig-name descname">get_feelings_by_user</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_feelings_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_feelings_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_poses_by_user">
+<code class="sig-name descname">get_poses_by_user</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_poses_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_poses_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_snapshot_by_user_and_ts">
+<code class="sig-name descname">get_snapshot_by_user_and_ts</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_snapshot_by_user_and_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_snapshot_by_user_and_ts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_snapshots_ts_by_user">
+<code class="sig-name descname">get_snapshots_ts_by_user</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_snapshots_ts_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_snapshots_ts_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.get_user_by_id">
+<code class="sig-name descname">get_user_by_id</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.get_user_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.get_user_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.db.Db.save_to_db">
+<code class="sig-name descname">save_to_db</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/db.html#Db.save_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.db.Db.save_to_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.db.mongodb">
+<span id="braincomputer-db-mongodb-module"></span><h2>braincomputer.db.mongodb module<a class="headerlink" href="#module-braincomputer.db.mongodb" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="braincomputer.db.mongodb.Mongodb">
+<em class="property">class </em><code class="sig-prename descclassname">braincomputer.db.mongodb.</code><code class="sig-name descname">Mongodb</code><span class="sig-paren">(</span><em class="sig-param">db_url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The DB has 2 tables- for users and for snapshots.</p>
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.close_db">
+<code class="sig-name descname">close_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.close_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.close_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_all_users">
+<code class="sig-name descname">get_all_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_all_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_all_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_color_images_by_user">
+<code class="sig-name descname">get_color_images_by_user</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_color_images_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_color_images_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_depth_images_by_user">
+<code class="sig-name descname">get_depth_images_by_user</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_depth_images_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_depth_images_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_feelings_by_user">
+<code class="sig-name descname">get_feelings_by_user</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_feelings_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_feelings_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_poses_by_user">
+<code class="sig-name descname">get_poses_by_user</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_poses_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_poses_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_snapshot_by_user_and_ts">
+<code class="sig-name descname">get_snapshot_by_user_and_ts</code><span class="sig-paren">(</span><em class="sig-param">user_id</em>, <em class="sig-param">timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_snapshot_by_user_and_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_snapshot_by_user_and_ts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_snapshots_ts_by_user">
+<code class="sig-name descname">get_snapshots_ts_by_user</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_snapshots_ts_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_snapshots_ts_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.get_user_by_id">
+<code class="sig-name descname">get_user_by_id</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.get_user_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.get_user_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.db.mongodb.Mongodb.save_to_db">
+<code class="sig-name descname">save_to_db</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/db/mongodb.html#Mongodb.save_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.db.mongodb.Mongodb.save_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>update users table if it’s a new user, and insert a snapshot to snapshots table</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.db">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-braincomputer.db" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BrainComputer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, ElaKadosh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/braincomputer.db.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

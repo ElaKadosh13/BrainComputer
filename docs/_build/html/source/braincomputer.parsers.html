@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>braincomputer.parsers package &#8212; BrainComputer 1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="braincomputer-parsers-package">
+<h1>braincomputer.parsers package<a class="headerlink" href="#braincomputer-parsers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-braincomputer.parsers.color_image">
+<span id="braincomputer-parsers-color-image-module"></span><h2>braincomputer.parsers.color_image module<a class="headerlink" href="#module-braincomputer.parsers.color_image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="braincomputer.parsers.color_image.parse_color_image">
+<code class="sig-prename descclassname">braincomputer.parsers.color_image.</code><code class="sig-name descname">parse_color_image</code><span class="sig-paren">(</span><em class="sig-param">snapshot</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/color_image.html#parse_color_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.color_image.parse_color_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.parsers.depth_image">
+<span id="braincomputer-parsers-depth-image-module"></span><h2>braincomputer.parsers.depth_image module<a class="headerlink" href="#module-braincomputer.parsers.depth_image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="braincomputer.parsers.depth_image.parse_depth_image">
+<code class="sig-prename descclassname">braincomputer.parsers.depth_image.</code><code class="sig-name descname">parse_depth_image</code><span class="sig-paren">(</span><em class="sig-param">snapshot</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/depth_image.html#parse_depth_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.depth_image.parse_depth_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.parsers.feelings">
+<span id="braincomputer-parsers-feelings-module"></span><h2>braincomputer.parsers.feelings module<a class="headerlink" href="#module-braincomputer.parsers.feelings" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="braincomputer.parsers.feelings.parse_feelings">
+<code class="sig-prename descclassname">braincomputer.parsers.feelings.</code><code class="sig-name descname">parse_feelings</code><span class="sig-paren">(</span><em class="sig-param">snapshot</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/feelings.html#parse_feelings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.feelings.parse_feelings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.parsers.parsers">
+<span id="braincomputer-parsers-parsers-module"></span><h2>braincomputer.parsers.parsers module<a class="headerlink" href="#module-braincomputer.parsers.parsers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="braincomputer.parsers.parsers.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">braincomputer.parsers.parsers.</code><code class="sig-name descname">Parser</code><span class="sig-paren">(</span><em class="sig-param">parsing_function</em>, <em class="sig-param">parser_type</em>, <em class="sig-param">mq_url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="braincomputer.parsers.parsers.Parser.callback">
+<code class="sig-name descname">callback</code><span class="sig-paren">(</span><em class="sig-param">ch</em>, <em class="sig-param">method</em>, <em class="sig-param">properties</em>, <em class="sig-param">body</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parser.callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parser.callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse by the parsing function and publish to the correct queue by topic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.parsers.parsers.Parser.create_queue">
+<code class="sig-name descname">create_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parser.create_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parser.create_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates consume (from server) and produce (to db) queues</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="braincomputer.parsers.parsers.Parsers">
+<em class="property">class </em><code class="sig-prename descclassname">braincomputer.parsers.parsers.</code><code class="sig-name descname">Parsers</code><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parsers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parsers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="braincomputer.parsers.parsers.Parsers.get_all_parsers">
+<code class="sig-name descname">get_all_parsers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parsers.get_all_parsers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parsers.get_all_parsers" title="Permalink to this definition">¶</a></dt>
+<dd><p>collects all the parser functions from this directory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="braincomputer.parsers.parsers.Parsers.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">snapshot</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#Parsers.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.Parsers.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="braincomputer.parsers.parsers.parse">
+<code class="sig-prename descclassname">braincomputer.parsers.parsers.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">parser_type</em>, <em class="sig-param">raw_data_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="braincomputer.parsers.parsers.run_parser">
+<code class="sig-prename descclassname">braincomputer.parsers.parsers.</code><code class="sig-name descname">run_parser</code><span class="sig-paren">(</span><em class="sig-param">parser_type</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#run_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.run_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="braincomputer.parsers.parsers.run_parser_mq">
+<code class="sig-prename descclassname">braincomputer.parsers.parsers.</code><code class="sig-name descname">run_parser_mq</code><span class="sig-paren">(</span><em class="sig-param">parser_type</em>, <em class="sig-param">mq_url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/parsers.html#run_parser_mq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.parsers.run_parser_mq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.parsers.pose">
+<span id="braincomputer-parsers-pose-module"></span><h2>braincomputer.parsers.pose module<a class="headerlink" href="#module-braincomputer.parsers.pose" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="braincomputer.parsers.pose.parse_pose">
+<code class="sig-prename descclassname">braincomputer.parsers.pose.</code><code class="sig-name descname">parse_pose</code><span class="sig-paren">(</span><em class="sig-param">snapshot</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/braincomputer/parsers/pose.html#parse_pose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.parsers.pose.parse_pose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.parsers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-braincomputer.parsers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">BrainComputer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, ElaKadosh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/braincomputer.parsers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
