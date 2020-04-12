@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>braincomputer.server package &#8212; BrainComputer 1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="braincomputer-server-package">
+<h1>braincomputer.server package<a class="headerlink" href="#braincomputer-server-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-braincomputer.server.server">
+<span id="braincomputer-server-server-module"></span><h2>braincomputer.server.server module<a class="headerlink" href="#module-braincomputer.server.server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="braincomputer.server.server.Handler">
+<em class="property">class </em><code class="sig-prename descclassname">braincomputer.server.server.</code><code class="sig-name descname">Handler</code><span class="sig-paren">(</span><em class="sig-param">connection</em>, <em class="sig-param">data_dir</em>, <em class="sig-param">publish</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/braincomputer/server/server.html#Handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.server.server.Handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<dl class="method">
+<dt id="braincomputer.server.server.Handler.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/braincomputer/server/server.html#Handler.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.server.server.Handler.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="braincomputer.server.server.handle_client">
+<code class="sig-prename descclassname">braincomputer.server.server.</code><code class="sig-name descname">handle_client</code><span class="sig-paren">(</span><em class="sig-param">connection</em>, <em class="sig-param">data</em>, <em class="sig-param">publish</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/braincomputer/server/server.html#handle_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.server.server.handle_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="braincomputer.server.server.run_server">
+<code class="sig-prename descclassname">braincomputer.server.server.</code><code class="sig-name descname">run_server</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">port</em>, <em class="sig-param">publish</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/braincomputer/server/server.html#run_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#braincomputer.server.server.run_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs server forever</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-braincomputer.server">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-braincomputer.server" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">BrainComputer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, ElaKadosh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/braincomputer.server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
