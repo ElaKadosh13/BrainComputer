@@ -37,7 +37,7 @@ def test_upload_snapshot(monkeypatch, capsys):
     monkeypatch.setattr(Reader, "__init__", value=mock_reader_init)
     monkeypatch.setattr(Connection, "receive_message", value=mock_connection_recv)
     host = '127.0.0.1'
-    port = 8001
+    port = 8005
     server = threading.Thread(target=mock_server, args=(host, port))
     server.start()
     upload_sample(host, port, '../sample/snapshot.txt')
