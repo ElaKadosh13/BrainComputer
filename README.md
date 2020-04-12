@@ -11,7 +11,7 @@ Under ModuleIndex you will find all the modules in my project, clicking on them 
 1. Clone the repository and enter it:
     ```
     $ git clone git@github.com:ElaKadosh13/BrainComputer.git
-    $ cd braincomputer/
+    $ cd BrainComputer/
     ```
 
 2. Run the installation script and activate the virtual environment:
