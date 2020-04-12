@@ -6,25 +6,23 @@
 ## Installation
 
 1. Clone the repository and enter it:
-
     ```
     $ git clone git@github.com:ElaKadosh13/BrainComputer.git
     $ cd braincomputer/
     ```
 
 2. Run the installation script and activate the virtual environment:
-
     ```
     $ ./scripts/install.sh
     $ source .env/bin/activate
     ```
 
 3. To check that everything is working as expected, run the tests:
-
     ```
     $ pytest tests/
     ```
-4. To deploy: 
+   
+4. To deploy (may take a while...): 
     ```
     $ ./scripts/run-pipelines.sh
     ```
@@ -77,7 +75,7 @@ Navigate to http://127.0.0.1:8080.
 You can see there the users snapshots by timestamp, or the progress of parser data over time.
 
 ## Parsers
-Adding a parser - 
+Adding a parser
 1. Add a file to the parsers directory
 2. Parser x should have a single parsing function: 'parse_x'
 3. And a field - parse_x.field = 'x' 

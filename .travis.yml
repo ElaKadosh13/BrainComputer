@@ -7,6 +7,3 @@ script:
   - pytest --cov-report term --cov=braincomputer/.
 after_success:
   - codecov
-services:
-  - rabbitmq
-  - mongodb
