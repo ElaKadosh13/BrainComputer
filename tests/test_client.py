@@ -6,6 +6,7 @@ from braincomputer.utils.connection import Connection
 from braincomputer.utils.user import User
 from braincomputer.protocol import Hello, Config, Snapshot
 from braincomputer.utils.image import ColorImage, DepthImage
+import time
 
 
 def mock_reader_init(self, path):
@@ -40,6 +41,7 @@ def test_upload_snapshot(monkeypatch, capsys):
     port = 8005
     server = threading.Thread(target=mock_server, args=(host, port))
     server.start()
+    time.sleep(1)
     upload_sample(host, port, '../sample/snapshot.txt')
     c = capsys.readouterr()
     assert "client running- may take some time" in c.out
