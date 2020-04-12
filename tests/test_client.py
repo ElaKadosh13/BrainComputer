@@ -24,13 +24,13 @@ def mock_iterate_snapshot(y):
 
 def mock_server(host, port):
     sock = socket.socket()
-    time.sleep(0.1)
+    time.sleep(0.5)
     sock.bind((host, port))
-    time.sleep(0.1)
+    time.sleep(0.5)
     sock.listen()
-    time.sleep(0.1)
+    time.sleep(0.5)
     sock.accept()
-    time.sleep(0.1)
+    time.sleep(0.5)
 
 
 def mock_connection_recv(self):

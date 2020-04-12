@@ -31,7 +31,7 @@ Under ModuleIndex you will find all the modules in my project, clicking on them 
     ```
 5. Run the client manually or using:
     ```
-    $ ./scripts/run-client-cli.sh
+    $ python -m braincomputer.client upload-sample <path to sample>
     ```
 ## Usage
 
